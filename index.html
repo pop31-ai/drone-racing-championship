@@ -704,9 +704,8 @@ function drawDrone3D(cx,cy,cz,cyaw,cpitch){
   var s=project(droneX,droneY,droneZ,cx,cy,cz,cyaw,cpitch);
   if(!s||s.z>100)return;
   var sz=Math.max(4,15*FOV/s.z);
-  var bodyAng=droneVisYaw;
   var visRoll=droneRoll*1.5;
-  X.save();X.translate(s.x,s.y);X.rotate(bodyAng+visRoll);
+  X.save();X.translate(s.x,s.y);X.rotate(visRoll);
 
   X.fillStyle='#1a1a2e';
   X.beginPath();
@@ -993,9 +992,8 @@ function drawHeli3D(cx,cy,cz,cyaw,cpitch){
   var s=project(droneX,droneY,droneZ,cx,cy,cz,cyaw,cpitch);
   if(!s||s.z>150)return;
   var sz=Math.max(4,18*FOV/s.z);
-  var bodyAng=droneVisYaw;
   var vr=droneRoll*1.2;
-  X.save();X.translate(s.x,s.y);X.rotate(bodyAng+vr);
+  X.save();X.translate(s.x,s.y);X.rotate(vr);
 
   X.fillStyle='#3a3a4a';X.fillRect(-sz*.5,-sz*.15,sz*1,sz*.3);
   X.fillStyle='#2a2a35';X.fillRect(-sz*.5,sz*.1,sz*.15,sz*.12);
