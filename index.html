@@ -1298,7 +1298,7 @@ function getCam(){
     camYaw=lookYaw;camPitch=lookPitch;
     return{x:camX,y:camY,z:camZ,yw:camYaw,cp:camPitch};
   }else if(camMode==='fpv'){
-    return{x:droneX,y:droneY+0.3,z:droneZ,yw:droneYaw,cp:0};
+    return{x:droneX,y:droneY+0.5,z:droneZ,yw:droneYaw,cp:dronePitch*0.5};
   }else{
     var tx=droneX,tz=droneZ,ty=80;
     camX+=(tx-camX)*0.08;camY+=(ty-camY)*0.08;camZ+=(tz-camZ)*0.08;
