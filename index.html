@@ -914,8 +914,8 @@ function updateHeliPhysics(dt){
   else{boostFuel=Math.min(100,boostFuel+dt*4);}
 
   droneYaw+=turn*rt;
-  var fwdX=Math.sin(droneYaw),fwdZ=Math.cos(droneYaw);
-  var rX=Math.cos(droneYaw),rZ=-Math.sin(droneYaw);
+  var fwdX=Math.sin(camYaw),fwdZ=Math.cos(camYaw);
+  var rX=Math.cos(camYaw),rZ=-Math.sin(camYaw);
   var sm=thr>0?0.6:0.3;
   if(bst>0)sm*=1.5;
   droneVX+=(rX*mx+fwdX*(-mz))*ac*sm;
