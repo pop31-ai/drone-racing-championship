@@ -1326,12 +1326,10 @@ function render(){
 }
 
 function getCam(){
+  var fwdX=Math.sin(droneYaw),fwdZ=Math.cos(droneYaw);
   if(camMode==='chase'){
-    var yawDiff=droneYaw-camYaw;while(yawDiff>Math.PI)yawDiff-=Math.PI*2;while(yawDiff<-Math.PI)yawDiff+=Math.PI*2;
-    camYaw+=yawDiff*0.08;
-    var cfwdX=Math.sin(camYaw),cfwdZ=Math.cos(camYaw);
-    camX=droneX-cfwdX*8;camZ=droneZ-cfwdZ*8;camY=droneY+3.5;
-    camPitch=0.1;
+    camX=droneX-fwdX*8;camZ=droneZ-fwdZ*8;camY=droneY+3.5;
+    camYaw=droneYaw;camPitch=0.1;
     return{x:camX,y:camY,z:camZ,yw:camYaw,cp:camPitch};
   }else if(camMode==='fpv'){
     return{x:droneX,y:droneY+0.5,z:droneZ,yw:droneYaw,cp:dronePitch*0.5};
