@@ -593,28 +593,26 @@ function drawGround(cx,cy,cz,cyaw,cpitch){
       }
     }
   }
-  var axes=[
-    {dx:60,dz:0,color:'#f44',label:'X+'},
-    {dx:-60,dz:0,color:'#a33',label:'X-'},
-    {dx:0,dz:60,color:'#44f',label:'Z+'},
-    {dx:0,dz:-60,color:'#33a',label:'Z-'}
-  ];
-  var pC=project(droneX,0.1,droneZ,cx,cy,cz,cyaw,cpitch);
-  if(pC&&pC.z<150){
-    axes.forEach(function(a){
-      var p=project(droneX+a.dx,0.1,droneZ+a.dz,cx,cy,cz,cyaw,cpitch);
-      if(p&&p.z<150){
-        X.strokeStyle=a.color;X.lineWidth=a.label?2:1;X.globalAlpha=0.5;
-        X.beginPath();X.moveTo(pC.x,pC.y);X.lineTo(p.x,p.y);X.stroke();
-        if(a.label){
-          X.fillStyle=a.color;X.font='bold 9px monospace';X.textAlign='center';
-          X.fillText(a.label,p.x,p.y-6);X.globalAlpha=1;
-        }
+  function drawAxes(ox,oy,oz,len,alpha,label){
+    var dirs=[{dx:len,dz:0,color:'#f44',l:'X'},{dx:-len,dz:0,color:'#a33',l:'-X'},{dx:0,dz:len,color:'#44f',l:'Z'},{dx:0,dz:-len,color:'#33a',l:'-Z'}];
+    var pO=project(ox,oy,oz,cx,cy,cz,cyaw,cpitch);
+    if(!pO||pO.z>200)return;
+    dirs.forEach(function(d){
+      var p=project(ox+d.dx,oy,oz+d.dz,cx,cy,cz,cyaw,cpitch);
+      if(p&&p.z<200){
+        X.strokeStyle=d.color;X.globalAlpha=alpha;X.lineWidth=1.5;
+        X.beginPath();X.moveTo(pO.x,pO.y);X.lineTo(p.x,p.y);X.stroke();
+        X.fillStyle=d.color;X.font='bold 8px monospace';X.textAlign='center';
+        X.fillText(d.l,p.x,p.y-4);
       }
     });
-    X.globalAlpha=1;
-    X.fillStyle='#0f0';X.beginPath();X.arc(pC.x,pC.y,3,0,Math.PI*2);X.fill();
+    X.fillStyle='#fff';X.font='bold 9px monospace';X.textAlign='center';
+    X.fillText(label,pO.x,pO.y-8);X.globalAlpha=1;
+    X.beginPath();X.arc(pO.x,pO.y,3,0,Math.PI*2);X.fill();
   }
+  drawAxes(0,0.1,0,60,0.35,'WORLD');
+  drawAxes(droneX,0.1,droneZ,40,0.5,'DRONE');
+  drawAxes(cx,0.1,cz,25,0.65,'CAM');
 }
 
 function drawTrack3D(cx,cy,cz,cyaw,cpitch,color){
