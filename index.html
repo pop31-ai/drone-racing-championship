@@ -503,7 +503,7 @@ function updatePhysics(dt){
   droneX+=droneVX;droneZ+=droneVZ;
   droneY+=droneVY;
   if(droneY<1){droneY=1;droneVY=0;}
-  var tp=0.15*mz,trl=-0.15*mx;
+  var tp=0.15*mz,trl=-0.15*mx-turn*0.3;
   dronePitch+=(tp-dronePitch)*0.15;droneRoll+=(trl-droneRoll)*0.15;
 
   if(bst>0&&opSettings.particles){
@@ -1290,7 +1290,9 @@ function getCam(){
   var fwdX=Math.sin(droneYaw),fwdZ=Math.cos(droneYaw);
   if(camMode==='chase'){
     var tx=droneX-fwdX*8,tz=droneZ-fwdZ*8,ty=droneY+3.5;
-    camX+=(tx-camX)*0.1;camY+=(ty-camY)*0.1;camZ+=(tz-camZ)*0.1;camYaw=droneYaw;camPitch=0.1;
+    camX+=(tx-camX)*0.1;camY+=(ty-camY)*0.1;camZ+=(tz-camZ)*0.1;
+    var yawDiff=droneYaw-camYaw;while(yawDiff>Math.PI)yawDiff-=Math.PI*2;while(yawDiff<-Math.PI)yawDiff+=Math.PI*2;
+    camYaw+=yawDiff*0.25;camPitch=0.1;
     return{x:camX,y:camY,z:camZ,yw:camYaw,cp:camPitch};
   }else if(camMode==='fpv'){
     return{x:droneX,y:droneY+0.3,z:droneZ,yw:droneYaw,cp:0};
