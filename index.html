@@ -578,6 +578,8 @@ function drawGround(cx,cy,cz,cyaw,cpitch){
     }
     return;
   }
+  var fwdX=Math.sin(droneYaw),fwdZ=Math.cos(droneYaw);
+  var rX=Math.cos(droneYaw),rZ=-Math.sin(droneYaw);
   for(var gz=-200;gz<=200;gz+=20){
     for(var gx=-200;gx<=200;gx+=20){
       var p1=project(gx,0,gz,cx,cy,cz,cyaw,cpitch);
@@ -590,6 +592,15 @@ function drawGround(cx,cy,cz,cyaw,cpitch){
         X.beginPath();X.moveTo(p1.x,p1.y);X.lineTo(p2.x,p2.y);X.lineTo(p3.x,p3.y);X.lineTo(p4.x,p4.y);X.closePath();X.stroke();
       }
     }
+  }
+  var pF=project(fwdX*20,0.1,fwdZ*20,cx,cy,cz,cyaw,cpitch);
+  var pC=project(0,0.1,0,cx,cy,cz,cyaw,cpitch);
+  var pR=project(rX*12,0.1,rZ*12,cx,cy,cz,cyaw,cpitch);
+  var pL=project(-rX*12,0.1,-rZ*12,cx,cy,cz,cyaw,cpitch);
+  if(pC&&pC.z<150){
+    if(pF&&pF.z<150){X.strokeStyle='rgba(0,255,100,0.4)';X.lineWidth=1.5;X.beginPath();X.moveTo(pC.x,pC.y);X.lineTo(pF.x,pF.y);X.stroke();}
+    if(pR&&pR.z<150){X.strokeStyle='rgba(0,150,255,0.3)';X.lineWidth=1;X.beginPath();X.moveTo(pC.x,pC.y);X.lineTo(pR.x,pR.y);X.stroke();}
+    if(pL&&pL.z<150){X.strokeStyle='rgba(255,100,0,0.3)';X.lineWidth=1;X.beginPath();X.moveTo(pC.x,pC.y);X.lineTo(pL.x,pL.y);X.stroke();}
   }
 }
 
