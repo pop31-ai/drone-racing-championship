@@ -604,12 +604,10 @@ function checkWallCollision(){
     var dx=droneX-cx2,dz=droneZ-cz;
     var d=Math.sqrt(dx*dx+dz*dz)||1;
     var nx=dx/d,nz=dz/d;
-    var push=minD-wallR+0.5;
-    droneX=cx2+nx*(wallR+0.5);droneZ=cz+nz*(wallR+0.5);
+    droneX=cx2+nx*wallR;droneZ=cz+nz*wallR;
     var vn=droneVX*nx+droneVZ*nz;
-    if(vn>0){droneVX-=vn*nx*1.2;droneVZ-=vn*nz*1.2;}
-    droneVX*=0.85;droneVZ*=0.85;
-    droneX+=nx*0.5;droneZ+=nz*0.5;
+    if(vn>0){droneVX-=vn*nx*1.1;droneVZ-=vn*nz*1.1;}
+    droneVX*=0.8;droneVZ*=0.8;
     collideFlash=0.3;
     if(opSettings.particles){
       for(var i=0;i<6;i++){
@@ -619,6 +617,14 @@ function checkWallCollision(){
     }
     playSound('crash');
     return true;
+  }
+  if(minD>wallR*2){
+    var a=trackSmooth[bestI],b=trackSmooth[(bestI+1)%trackSmooth.length];
+    var abx=b[0]-a[0],abz=b[2]-a[2];
+    var cx2=a[0]+abx*bestT,cz=a[2]+abz*bestT;
+    var dx=cx2-droneX,dz=cz-droneZ;
+    var pull=0.01*(minD-wallR*2);
+    droneVX+=dx*pull;droneVZ+=dz*pull;
   }
   return false;
 }
