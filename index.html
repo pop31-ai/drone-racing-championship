@@ -1383,71 +1383,61 @@ function drawHeliCockpit(){
   X.strokeStyle='#666';X.lineWidth=1;
   X.beginPath();X.moveTo(w*0.5,h*0.85);X.lineTo(w*0.5-droneRoll*40,h*0.92);X.stroke();
 
-  var ledY=h*0.54;
+  X.fillStyle='#181820';X.fillRect(w*0.02,h*0.84,w*0.96,h*0.14);
+  X.strokeStyle='#555';X.lineWidth=1;X.strokeRect(w*0.02,h*0.84,w*0.96,h*0.14);
+
+  var ledY=h*0.87;
   var leds=[
-    {x:0.14,on:keys['KeyR'],c:'#0f0',l:'R'},
-    {x:0.18,on:keys['KeyF'],c:'#f80',l:'F'},
-    {x:0.22,on:keys['KeyQ'],c:'#0ff',l:'Q'},
-    {x:0.26,on:keys['KeyE'],c:'#f0f',l:'E'},
-    {x:0.32,on:keys['KeyW'],c:'#0ff',l:'W'},
+    {x:0.06,on:keys['KeyR'],c:'#0f0',l:'R'},
+    {x:0.12,on:keys['KeyF'],c:'#f80',l:'F'},
+    {x:0.18,on:keys['KeyQ'],c:'#0ff',l:'Q'},
+    {x:0.24,on:keys['KeyE'],c:'#f0f',l:'E'},
+    {x:0.30,on:keys['KeyW'],c:'#0ff',l:'W'},
     {x:0.36,on:keys['KeyS'],c:'#0ff',l:'S'},
-    {x:0.40,on:keys['KeyA'],c:'#0ff',l:'A'},
-    {x:0.44,on:keys['KeyD'],c:'#0ff',l:'D'},
+    {x:0.42,on:keys['KeyA'],c:'#0ff',l:'A'},
+    {x:0.48,on:keys['KeyD'],c:'#0ff',l:'D'},
     {x:0.56,on:keys['ShiftLeft'],c:'#0f0',l:'THR'},
-    {x:0.60,on:keys['Space'],c:'#f80',l:'BST'},
-    {x:0.66,on:false,c:'#0f0',l:'NAV'},
-    {x:0.70,on:opSettings.fog,c:'#f80',l:'FOG'},
-    {x:0.74,on:opSettings.sound,c:'#0f0',l:'SND'},
-    {x:0.78,on:opSettings.speedLines,c:'#ff0',l:'SPD'},
-    {x:0.82,on:opSettings.particles,c:'#f0f',l:'PAR'},
+    {x:0.62,on:keys['Space'],c:'#f80',l:'BST'},
+    {x:0.70,on:false,c:'#0f0',l:'NAV'},
+    {x:0.76,on:opSettings.fog,c:'#f80',l:'FOG'},
+    {x:0.82,on:opSettings.sound,c:'#0f0',l:'SND'},
+    {x:0.88,on:opSettings.speedLines,c:'#ff0',l:'SPD'},
+    {x:0.94,on:opSettings.particles,c:'#f0f',l:'PAR'},
   ];
   for(var i=0;i<leds.length;i++){
     var ld=leds[i];
-    X.fillStyle='#333';X.beginPath();X.arc(w*ld.x,ledY,3,0,Math.PI*2);X.fill();
-    if(ld.on){X.fillStyle=ld.c;X.beginPath();X.arc(w*ld.x,ledY,3,0,Math.PI*2);X.fill();}
-    X.fillStyle='#555';X.font='5px monospace';X.textAlign='center';X.fillText(ld.l,w*ld.x,ledY+8);
+    X.fillStyle=ld.on?ld.c:'#222';X.beginPath();X.arc(w*ld.x,ledY,8,0,Math.PI*2);X.fill();
+    X.strokeStyle=ld.on?ld.c:'#444';X.lineWidth=1;X.beginPath();X.arc(w*ld.x,ledY,8,0,Math.PI*2);X.stroke();
+    X.fillStyle='#999';X.font='9px monospace';X.textAlign='center';X.fillText(ld.l,w*ld.x,ledY+16);
   }
 
-  var swY=h*0.65;
+  var swY=h*0.93;
   var swLabels=[
-    {x:0.04,l:'V',on:keys['KeyV'],c:'#f0f'},
-    {x:0.07,l:'C',on:keys['KeyC'],c:'#ff0'},
-    {x:0.10,l:'F1',on:debugOn,c:'#f44'},
+    {x:0.06,l:'V',on:keys['KeyV'],c:'#f0f'},
+    {x:0.12,l:'C',on:keys['KeyC'],c:'#ff0'},
+    {x:0.18,l:'F1',on:debugOn,c:'#f44'},
   ];
   for(var i=0;i<swLabels.length;i++){
     var sw=swLabels[i];
-    X.fillStyle='#333';X.fillRect(w*sw.x-5,swY-4,10,8);
-    X.strokeStyle='#555';X.lineWidth=0.5;X.strokeRect(w*sw.x-5,swY-4,10,8);
-    if(sw.on){X.fillStyle=sw.c;X.fillRect(w*sw.x-3,swY-2,6,4);}
-    X.fillStyle='#777';X.font='5px monospace';X.textAlign='center';X.fillText(sw.l,w*sw.x,swY+12);
+    X.fillStyle='#333';X.fillRect(w*sw.x-8,swY-6,16,12);
+    X.strokeStyle='#666';X.lineWidth=1;X.strokeRect(w*sw.x-8,swY-6,16,12);
+    if(sw.on){X.fillStyle=sw.c;X.fillRect(w*sw.x-6,swY-4,12,8);}
+    X.fillStyle='#aaa';X.font='bold 10px monospace';X.textAlign='center';X.fillText(sw.l,w*sw.x,swY+16);
   }
 
-  X.fillStyle='#181820';X.fillRect(w*0.14,h*0.88,w*0.22,h*0.08);
-  X.strokeStyle='#333';X.lineWidth=0.5;X.strokeRect(w*0.14,h*0.88,w*0.22,h*0.08);
-  X.fillStyle='#555';X.font='7px monospace';X.textAlign='left';
-  X.fillText('BOOST',w*0.15,h*0.91);
-  X.fillStyle='#333';X.fillRect(w*0.15,h*0.92,w*0.20,4);
-  X.fillStyle=boostFuel<20?'#f00':'#0f0';
-  X.fillRect(w*0.15,h*0.92,w*0.20*boostFuel/100,4);
+  X.fillStyle='#333';X.fillRect(w*0.28,h*0.85,w*0.20,8);X.strokeStyle='#555';X.strokeRect(w*0.28,h*0.85,w*0.20,8);
+  X.fillStyle='#0ff';X.font='bold 10px monospace';X.textAlign='center';X.fillText('BOOST',w*0.38,h*0.84);
+  X.fillStyle=boostFuel<20?'#f00':'#0f0';X.fillRect(w*0.29,h*0.86,w*0.18*boostFuel/100,6);
 
-  X.fillStyle='#181820';X.fillRect(w*0.38,h*0.88,w*0.22,h*0.08);
-  X.strokeStyle='#333';X.strokeRect(w*0.38,h*0.88,w*0.22,h*0.08);
-  X.fillStyle='#555';X.font='7px monospace';X.textAlign='left';
-  X.fillText('BATTERY',w*0.39,h*0.91);
-  X.fillStyle='#333';X.fillRect(w*0.39,h*0.92,w*0.20,4);
-  X.fillStyle='#0f0';
-  var bat=Math.max(0,100-raceTime*0.15);
-  X.fillRect(w*0.39,h*0.92,w*0.20*bat/100,4);
+  X.fillStyle='#333';X.fillRect(w*0.52,h*0.85,w*0.20,8);X.strokeStyle='#555';X.strokeRect(w*0.52,h*0.85,w*0.20,8);
+  X.fillStyle='#0ff';X.font='bold 10px monospace';X.textAlign='center';X.fillText('BATTERY',w*0.62,h*0.84);
+  X.fillStyle='#0f0';var bat=Math.max(0,100-raceTime*0.15);X.fillRect(w*0.53,h*0.86,w*0.18*bat/100,6);
 
   X.fillStyle='rgba(0,255,255,0.4)';X.font='bold 10px monospace';X.textAlign='left';
   X.fillText(HELI_TYPES[heliType].name.toUpperCase(),w*0.02,h*0.98);
   X.textAlign='right';
   X.fillText(Math.round(droneY)+'m / '+Math.round(spd*36)+'km/h',w*0.98,h*0.98);
   X.textAlign='left';
-  X.fillStyle='#ff0';X.font='bold 8px monospace';X.textAlign='left';
-  X.fillText('LEDs: y='+Math.round(ledY)+' x='+Math.round(w*0.14)+'-'+Math.round(w*0.82),10,h*0.50);
-  X.fillText('Switches: y='+Math.round(swY)+' x='+Math.round(w*0.04)+'-'+Math.round(w*0.10),10,h*0.48);
-  X.fillText('Bars: y='+Math.round(h*0.88)+' w='+Math.round(w*0.22),10,h*0.46);
 }
 
 function drawMKADenv(cx,cy,cz,cyaw,cpitch){
