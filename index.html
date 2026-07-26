@@ -837,15 +837,17 @@ function drawMinimap(){
   X.fillStyle='rgba(0,0,0,0.7)';X.beginPath();X.arc(mx,my,mr,0,Math.PI*2);X.fill();
   X.strokeStyle='rgba(0,255,255,0.3)';X.lineWidth=1;X.stroke();
   var sc=0.25;
+  var cs=Math.cos(-droneYaw),sn=Math.sin(-droneYaw);
   X.strokeStyle='rgba(0,255,255,0.4)';X.lineWidth=1.5;X.beginPath();
   for(var i=0;i<trackSmooth.length;i+=3){
-    var dx=(trackSmooth[i][0]-droneX)*sc,dz=(trackSmooth[i][2]-droneZ)*sc;
+    var rx=(trackSmooth[i][0]-droneX),rz=(trackSmooth[i][2]-droneZ);
+    var dx=(rx*cs-rz*sn)*sc,dz=(rx*sn+rz*cs)*sc;
     if(i===0)X.moveTo(mx+dx,my+dz);else X.lineTo(mx+dx,my+dz);
   }
   X.closePath();X.stroke();
   X.fillStyle='#0f0';X.beginPath();X.arc(mx,my,3,0,Math.PI*2);X.fill();
   X.strokeStyle='#0f0';X.lineWidth=1;X.beginPath();X.moveTo(mx,my);
-  X.lineTo(mx+Math.sin(droneYaw)*8,my+Math.cos(droneYaw)*8);X.stroke();
+  X.lineTo(mx,my-8);X.stroke();
 }
 
 function drawCorridor3D(cx,cy,cz,cyaw,cpitch){
