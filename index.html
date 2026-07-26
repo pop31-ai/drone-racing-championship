@@ -1268,76 +1268,156 @@ function drawHeli3D(cx,cy,cz,cyaw,cpitch){
   var s=project(droneX,droneY,droneZ,cx,cy,cz,cyaw,cpitch);
   if(!s||s.z>150)return;
   var sz=Math.max(4,18*FOV/s.z);
-  var vr=droneRoll*1.2;
-  var yr=-(droneYaw-cyaw)+Math.PI/2;
+  var vr=droneRoll*0.8;
+  var yr=droneYaw-cyaw;
   X.save();X.translate(s.x,s.y);X.rotate(yr+vr);
   var ht=HELI_TYPES[heliType];
   var c=ht.color;
 
   if(heliType===0){
-    X.fillStyle=c;X.beginPath();X.ellipse(-sz*.05,0,sz*.22,sz*.18,0,0,Math.PI*2);X.fill();
-    X.strokeStyle='#888';X.lineWidth=1;X.stroke();
-    X.fillStyle='#aaddff';X.globalAlpha=0.4;X.beginPath();X.ellipse(-sz*.05,-sz*.06,sz*.16,sz*.12,-0.2,0,Math.PI*2);X.fill();X.globalAlpha=1;
-    X.fillStyle='#555';X.fillRect(sz*.15,-sz*.04,sz*.45,sz*.06);
-    X.strokeStyle='#888';X.lineWidth=1;X.beginPath();X.moveTo(sz*.55,-sz*.01);X.lineTo(sz*.7,sz*.08);X.stroke();
+    X.fillStyle=c;X.beginPath();X.ellipse(0,-sz*.05,sz*.1,sz*.22,0,0,Math.PI*2);X.fill();X.strokeStyle='#888';X.lineWidth=1;X.stroke();
+    X.fillStyle='#aaddff';X.globalAlpha=0.4;X.beginPath();X.ellipse(0,-sz*.18,sz*.07,sz*.08,0,0,Math.PI*2);X.fill();X.globalAlpha=1;
+    X.fillStyle='#555';X.fillRect(-sz*.03,sz*.12,sz*.06,sz*.35);
+    X.strokeStyle='#888';X.lineWidth=1;X.beginPath();X.moveTo(-sz*.01,sz*.45);X.lineTo(sz*.06,sz*.55);X.stroke();
     X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.02);
-    X.beginPath();X.moveTo(-sz*.08,sz*.18);X.lineTo(-sz*.08,sz*.28);X.stroke();
-    X.beginPath();X.moveTo(sz*.08,sz*.18);X.lineTo(sz*.08,sz*.28);X.stroke();
-    X.beginPath();X.moveTo(-sz*.15,sz*.28);X.lineTo(sz*.15,sz*.28);X.stroke();
+    X.beginPath();X.moveTo(-sz*.18,0);X.lineTo(-sz*.25,0);X.stroke();
+    X.beginPath();X.moveTo(sz*.18,0);X.lineTo(sz*.25,0);X.stroke();
+    X.beginPath();X.moveTo(-sz*.25,-sz*.05);X.lineTo(-sz*.25,sz*.05);X.stroke();
+    X.beginPath();X.moveTo(sz*.25,-sz*.05);X.lineTo(sz*.25,sz*.05);X.stroke();
   }else if(heliType===1){
     X.fillStyle=c;X.beginPath();
-    X.moveTo(-sz*.35,0);X.quadraticCurveTo(-sz*.25,-sz*.2,sz*.0,-sz*.12);
-    X.lineTo(sz*.5,-sz*.06);X.lineTo(sz*.55,sz*.06);X.lineTo(sz*.0,sz*.12);
-    X.quadraticCurveTo(-sz*.25,sz*.2,-sz*.35,0);X.fill();
+    X.ellipse(0,-sz*.05,sz*.12,sz*.25,0,0,Math.PI*2);X.fill();
     X.strokeStyle='#999';X.lineWidth=1;X.stroke();
-    X.fillStyle='#aaddff';X.globalAlpha=0.35;X.beginPath();X.ellipse(-sz*.15,-sz*.06,sz*.12,sz*.09,-0.15,0,Math.PI*2);X.fill();X.globalAlpha=1;
-    X.fillStyle='#444';X.fillRect(sz*.1,-sz*.04,sz*.4,sz*.05);
-    X.strokeStyle='#777';X.lineWidth=1;X.beginPath();X.moveTo(sz*.5,-sz*.02);X.lineTo(sz*.62,sz*.06);X.stroke();
+    X.fillStyle='#aaddff';X.globalAlpha=0.35;X.beginPath();X.ellipse(0,-sz*.2,sz*.09,sz*.08,0,0,Math.PI*2);X.fill();X.globalAlpha=1;
+    X.fillStyle='#444';X.fillRect(-sz*.025,sz*.15,sz*.05,sz*.3);
+    X.strokeStyle='#777';X.lineWidth=1;X.beginPath();X.moveTo(-sz*.005,sz*.42);X.lineTo(sz*.05,sz*.5);X.stroke();
     X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.02);
-    X.beginPath();X.moveTo(-sz*.05,sz*.15);X.lineTo(-sz*.05,sz*.26);X.stroke();
-    X.beginPath();X.moveTo(sz*.08,sz*.15);X.lineTo(sz*.08,sz*.26);X.stroke();
-    X.beginPath();X.moveTo(-sz*.12,sz*.26);X.lineTo(sz*.15,sz*.26);X.stroke();
+    X.beginPath();X.moveTo(-sz*.2,0);X.lineTo(-sz*.28,0);X.stroke();
+    X.beginPath();X.moveTo(sz*.2,0);X.lineTo(sz*.28,0);X.stroke();
+    X.beginPath();X.moveTo(-sz*.28,-sz*.04);X.lineTo(-sz*.28,sz*.04);X.stroke();
+    X.beginPath();X.moveTo(sz*.28,-sz*.04);X.lineTo(sz*.28,sz*.04);X.stroke();
   }else if(heliType===2){
     X.fillStyle=c;
-    X.fillRect(-sz*.35,-sz*.18,sz*.7,sz*.36);
-    X.fillStyle='#8a9a7a';X.fillRect(-sz*.35,-sz*.18,sz*.15,sz*.36);
-    X.strokeStyle='#556';X.lineWidth=1.5;X.strokeRect(-sz*.35,-sz*.18,sz*.7,sz*.36);
-    X.fillStyle='#aaddff';X.globalAlpha=0.3;X.fillRect(-sz*.3,-sz*.14,sz*.2,sz*.28);X.globalAlpha=1;
-    X.fillStyle='#555';X.fillRect(sz*.35,-sz*.06,sz*.4,sz*.08);
-    X.fillStyle='#666';X.fillRect(sz*.7,-sz*.1,sz*.08,sz*.16);
+    X.fillRect(-sz*.18,-sz*.25,sz*.36,sz*.5);
+    X.fillStyle='#8a9a7a';X.fillRect(-sz*.18,sz*.15,sz*.36,sz*.1);
+    X.strokeStyle='#556';X.lineWidth=1.5;X.strokeRect(-sz*.18,-sz*.25,sz*.36,sz*.5);
+    X.fillStyle='#aaddff';X.globalAlpha=0.3;X.fillRect(-sz*.14,-sz*.22,sz*.28,sz*.1);X.globalAlpha=1;
+    X.fillStyle='#555';X.fillRect(-sz*.02,sz*.25,sz*.04,sz*.25);
+    X.fillStyle='#666';X.fillRect(-sz*.08,sz*.48,sz*.16,sz*.08);
     X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.025);
-    X.beginPath();X.moveTo(-sz*.15,sz*.18);X.lineTo(-sz*.15,sz*.3);X.stroke();
-    X.beginPath();X.moveTo(sz*.15,sz*.18);X.lineTo(sz*.15,sz*.3);X.stroke();
-    X.beginPath();X.moveTo(-sz*.22,sz*.3);X.lineTo(sz*.22,sz*.3);X.stroke();
+    X.beginPath();X.moveTo(-sz*.3,0);X.lineTo(-sz*.38,-sz*.04);X.stroke();
+    X.beginPath();X.moveTo(sz*.3,0);X.lineTo(sz*.38,-sz*.04);X.stroke();
+    X.beginPath();X.moveTo(-sz*.38,-sz*.06);X.lineTo(-sz*.38,sz*.06);X.stroke();
+    X.beginPath();X.moveTo(sz*.38,-sz*.06);X.lineTo(sz*.38,sz*.06);X.stroke();
   }else{
     X.fillStyle=c;X.beginPath();
-    X.moveTo(-sz*.3,0);X.quadraticCurveTo(-sz*.2,-sz*.18,sz*.05,-sz*.1);
-    X.lineTo(sz*.4,-sz*.05);X.lineTo(sz*.5,sz*.0);X.lineTo(sz*.4,sz*.05);
-    X.lineTo(sz*.05,sz*.1);X.quadraticCurveTo(-sz*.2,sz*.18,-sz*.3,0);X.fill();
+    X.ellipse(0,-sz*.04,sz*.11,sz*.24,0,0,Math.PI*2);X.fill();
     X.strokeStyle='#aab';X.lineWidth=1;X.stroke();
-    X.fillStyle='#aaddff';X.globalAlpha=0.4;X.beginPath();X.ellipse(-sz*.1,-sz*.05,sz*.14,sz*.1,-0.1,0,Math.PI*2);X.fill();X.globalAlpha=1;
-    X.fillStyle='#556';X.fillRect(sz*.1,-sz*.04,sz*.32,sz*.05);
-    X.beginPath();X.arc(sz*.5,sz*.0,sz*.06,0,Math.PI*2);X.fillStyle='#666';X.fill();X.strokeStyle='#888';X.lineWidth=0.5;X.stroke();
+    X.fillStyle='#aaddff';X.globalAlpha=0.4;X.beginPath();X.ellipse(0,-sz*.18,sz*.08,sz*.07,0,0,Math.PI*2);X.fill();X.globalAlpha=1;
+    X.fillStyle='#556';X.fillRect(-sz*.02,sz*.15,sz*.04,sz*.28);
+    X.beginPath();X.arc(0,sz*.45,sz*.04,0,Math.PI*2);X.fillStyle='#666';X.fill();X.strokeStyle='#888';X.lineWidth=0.5;X.stroke();
     X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.02);
-    X.beginPath();X.moveTo(-sz*.05,sz*.15);X.lineTo(-sz*.05,sz*.25);X.stroke();
-    X.beginPath();X.moveTo(sz*.08,sz*.15);X.lineTo(sz*.08,sz*.25);X.stroke();
-    X.beginPath();X.moveTo(-sz*.1,sz*.25);X.lineTo(sz*.13,sz*.25);X.stroke();
+    X.beginPath();X.moveTo(-sz*.22,0);X.lineTo(-sz*.28,0);X.stroke();
+    X.beginPath();X.moveTo(sz*.22,0);X.lineTo(sz*.28,0);X.stroke();
+    X.beginPath();X.moveTo(-sz*.28,-sz*.04);X.lineTo(-sz*.28,sz*.04);X.stroke();
+    X.beginPath();X.moveTo(sz*.28,-sz*.04);X.lineTo(sz*.28,sz*.04);X.stroke();
   }
 
   var rotA=(raceTime*30)%360*Math.PI/180;
   X.globalAlpha=0.35;X.strokeStyle='#0ff';X.lineWidth=Math.max(1,sz*0.03);
-  X.beginPath();X.ellipse(0,-sz*.2,sz*.7*Math.cos(rotA)*0.3+sz*.5,sz*.05,0,0,Math.PI*2);X.stroke();
+  X.beginPath();X.ellipse(0,-sz*.05,sz*.06+sz*.4*Math.abs(Math.cos(rotA)),sz*.4*Math.abs(Math.sin(rotA))+sz*.04,0,0,Math.PI*2);X.stroke();
   X.globalAlpha=1;
 
-  X.fillStyle='#f00';X.beginPath();X.arc(sz*.55,sz*.06,sz*.025,0,Math.PI*2);X.fill();
-  X.fillStyle='#0f0';X.beginPath();X.arc(-sz*.55,sz*.06,sz*.025,0,Math.PI*2);X.fill();
+  X.fillStyle='#f00';X.beginPath();X.arc(sz*.12,sz*.08,sz*.02,0,Math.PI*2);X.fill();
+  X.fillStyle='#0f0';X.beginPath();X.arc(-sz*.12,sz*.08,sz*.02,0,Math.PI*2);X.fill();
 
   if(keys['ShiftLeft']||keys['ShiftRight']||(jrAct.a&&jrAct.y<-0.3)){
     X.globalAlpha=0.12;X.fillStyle='#aaa';
-    X.beginPath();X.arc(0,sz*.35,sz*.18,0,Math.PI*2);X.fill();
+    X.beginPath();X.arc(0,sz*.1,sz*.15,0,Math.PI*2);X.fill();
     X.globalAlpha=1;
   }
   X.restore();
+}
+
+function drawHeliCockpit(){
+  if(!heliMode||camMode!=='fpv')return;
+  var w=W,h=H;
+  X.fillStyle='#1a1a1e';X.fillRect(0,h*0.62,w,h*0.38);
+  X.fillStyle='#252528';
+  X.fillRect(0,h*0.58,w,h*0.06);
+  X.strokeStyle='#444';X.lineWidth=1;
+  X.beginPath();X.moveTo(0,h*0.58);X.lineTo(w,h*0.58);X.stroke();
+  X.beginPath();X.moveTo(0,h*0.64);X.lineTo(w,h*0.64);X.stroke();
+
+  X.save();
+  X.beginPath();X.moveTo(w*0.08,h*0.58);X.lineTo(w*0.12,h*0.58);X.lineTo(w*0.06,h*0);X.lineTo(0,0);X.lineTo(0,h*0.58);X.closePath();
+  X.fillStyle='#1a1a1e';X.fill();X.strokeStyle='#333';X.lineWidth=2;X.stroke();
+  X.beginPath();X.moveTo(w*0.92,h*0.58);X.lineTo(w*0.88,h*0.58);X.lineTo(w*0.94,h*0);X.lineTo(w,0);X.lineTo(w,h*0.58);X.closePath();
+  X.fillStyle='#1a1a1e';X.fill();X.strokeStyle='#333';X.lineWidth=2;X.stroke();
+  X.beginPath();X.moveTo(w*0.12,h*0.58);X.lineTo(w*0.48,h*0.58);X.lineTo(w*0.48,h*0.52);X.lineTo(w*0.12,h*0.52);X.closePath();
+  X.fillStyle='#181820';X.fill();X.strokeStyle='#555';X.lineWidth=1;X.stroke();
+  X.beginPath();X.moveTo(w*0.52,h*0.58);X.lineTo(w*0.88,h*0.58);X.lineTo(w*0.88,h*0.52);X.lineTo(w*0.52,h*0.52);X.closePath();
+  X.fillStyle='#181820';X.fill();X.strokeStyle='#555';X.lineWidth=1;X.stroke();
+  X.restore();
+
+  var spd=Math.sqrt(droneVX*droneVX+droneVZ*droneVZ);
+  function drawGauge(cx2,cy2,r,label,value,max2,unit,col){
+    X.fillStyle='#111';X.beginPath();X.arc(cx2,cy2,r,0,Math.PI*2);X.fill();
+    X.strokeStyle='#444';X.lineWidth=2;X.stroke();
+    var pct=Math.min(1,value/max2);
+    X.strokeStyle=col;X.lineWidth=2;X.beginPath();
+    X.arc(cx2,cy2,r-4,-Math.PI*0.75,-Math.PI*0.75+pct*Math.PI*1.5);X.stroke();
+    X.fillStyle='#fff';X.font='bold '+(r*0.35)+'px monospace';X.textAlign='center';X.textBaseline='middle';
+    X.fillText(Math.round(value),cx2,cy2-r*0.1);
+    X.fillStyle='#888';X.font=(r*0.2)+'px monospace';
+    X.fillText(unit,cx2,cy2+r*0.2);
+    X.fillStyle='#666';X.font='bold '+(r*0.18)+'px sans-serif';
+    X.fillText(label,cx2,cy2-r*0.55);
+    X.textBaseline='alphabetic';
+  }
+  drawGauge(w*0.18,h*0.72,36,'RPM',300+thr*200,600,'rpm','#0ff');
+  drawGauge(w*0.35,h*0.72,36,'ALT',droneY,50,'m','#0f0');
+  drawGauge(w*0.5,h*0.72,36,'IAS',spd*36,250,'km/h','#ff0');
+  drawGauge(w*0.65,h*0.72,36,'V/S',droneVY*60,200,'m/m','#f80');
+  drawGauge(w*0.82,h*0.72,36,'HDG',(droneYaw*180/Math.PI+360)%360,360,'°','#0af');
+
+  X.strokeStyle='#888';X.lineWidth=2;
+  X.beginPath();X.moveTo(w*0.5-20,h*0.85);X.lineTo(w*0.5+20,h*0.85);X.lineTo(w*0.5+8,h*0.92);X.lineTo(w*0.5-8,h*0.92);X.closePath();X.stroke();
+  X.strokeStyle='#666';X.lineWidth=1;
+  X.beginPath();X.moveTo(w*0.5,h*0.85);X.lineTo(w*0.5-droneRoll*40,h*0.92);X.stroke();
+
+  X.strokeStyle='#555';X.lineWidth=1.5;
+  X.strokeRect(w*0.14,h*0.52,w*0.04,h*0.03);
+  X.strokeRect(w*0.22,h*0.52,w*0.04,h*0.03);
+  X.strokeRect(w*0.30,h*0.52,w*0.04,h*0.03);
+  X.strokeRect(w*0.38,h*0.52,w*0.04,h*0.03);
+  X.fillStyle=keys['KeyR']?'#0f0':'#333';
+  X.fillRect(w*0.15,h*0.525,w*0.02,h*0.02);
+  X.fillStyle=keys['KeyF']?'#f80':'#333';
+  X.fillRect(w*0.23,h*0.525,w*0.02,h*0.02);
+  X.fillStyle=keys['KeyQ']?'#0ff':'#333';
+  X.fillRect(w*0.31,h*0.525,w*0.02,h*0.02);
+  X.fillStyle=keys['KeyE']?'#f0f':'#333';
+  X.fillRect(w*0.39,h*0.525,w*0.02,h*0.02);
+
+  X.fillStyle='#888';X.font='7px monospace';X.textAlign='center';
+  X.fillText('RU',w*0.16,h*0.55);
+  X.fillText('DN',w*0.24,h*0.55);
+  X.fillText('YAW',w*0.32,h*0.55);
+  X.fillText('YAW',w*0.40,h*0.55);
+
+  X.fillStyle=keys['ShiftLeft']?'#0f0':'#333';
+  X.fillRect(w*0.86,h*0.52,w*0.06,h*0.03);X.strokeStyle='#555';X.strokeRect(w*0.86,h*0.52,w*0.06,h*0.03);
+  X.fillStyle='#888';X.font='6px monospace';X.fillText('THR',w*0.89,h*0.55);
+  X.fillStyle=keys['Space']?'#f80':'#333';
+  X.fillRect(w*0.86,h*0.555,w*0.06,h*0.03);X.strokeStyle='#555';X.strokeRect(w*0.86,h*0.555,w*0.06,h*0.03);
+  X.fillStyle='#888';X.fillText('BST',w*0.89,h*0.585);
+
+  X.fillStyle='rgba(0,255,255,0.4)';X.font='bold 10px monospace';X.textAlign='left';
+  X.fillText(HELI_TYPES[heliType].name.toUpperCase(),w*0.02,h*0.98);
+  X.textAlign='right';
+  X.fillText(Math.round(droneY)+'m / '+Math.round(spd*36)+'km/h',w*0.98,h*0.98);
+  X.textAlign='left';
 }
 
 function drawMKADenv(cx,cy,cz,cyaw,cpitch){
@@ -1631,6 +1711,7 @@ function render(){
     drawBots3D(cam.x,cam.y,cam.z,cam.yw,cam.cp);
     if(opSettings.fog)drawFogOverlay();
     if(collideFlash>0){X.fillStyle='rgba(255,50,0,'+(collideFlash*0.5)+')';X.fillRect(0,0,W,H);}
+    drawHeliCockpit();
     drawMinimap();drawHUD();
     if(debugOn){drawDebug();drawDebugWalls(cam.x,cam.y,cam.z,cam.yw,cam.cp);}
     var vehLabel=heliMode?'HELICOPTER':'DRONE';
