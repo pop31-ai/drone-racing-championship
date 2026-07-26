@@ -1123,6 +1123,19 @@ function drawHUD(){
     X.fillStyle=altPct<0.3?'#f80':altPct<0.8?'#0f0':'#f00';
     X.fillRect(62,H-56+40*(1-altPct),8,40*altPct);
   }
+  var cx2=W-40,cy2=H-40,cr=28;
+  X.fillStyle='rgba(0,0,0,0.5)';X.beginPath();X.arc(cx2,cy2,cr+4,0,Math.PI*2);X.fill();
+  X.strokeStyle='rgba(0,255,255,0.3)';X.lineWidth=1;X.beginPath();X.arc(cx2,cy2,cr,0,Math.PI*2);X.stroke();
+  var labels=[{a:0,t:'Z+',c:'#44f'},{a:Math.PI/2,t:'X+',c:'#f44'},{a:Math.PI,t:'Z-',c:'#33a'},{a:-Math.PI/2,t:'X-',c:'#a33'}];
+  labels.forEach(function(l){
+    var ang=l.a-droneYaw;
+    var lx=cx2+Math.sin(ang)*cr,ly=cy2-Math.cos(ang)*cr;
+    X.fillStyle=l.c;X.font='bold 8px monospace';X.textAlign='center';X.textBaseline='middle';
+    X.fillText(l.t,lx,ly);
+  });
+  X.textBaseline='alphabetic';
+  X.fillStyle='#0f0';X.font='bold 10px monospace';X.textAlign='center';
+  X.fillText('\u25B2',cx2,cy2-cr-6);
 }
 
 function updateCPIndicator(){
