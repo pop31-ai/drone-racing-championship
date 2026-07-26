@@ -1375,7 +1375,7 @@ function drawHeliCockpit(){
   }
   drawGauge(w*0.18,h*0.72,36,'RPM',300+thr*200,600,'rpm','#0ff');
   drawGauge(w*0.35,h*0.72,36,'ALT',droneY,50,'m','#0f0');
-  drawGauge(w*0.5,h*0.72,36,'IAS',spd*36,250,'km/h','#ff0');
+  drawGauge(w*0.5,h*0.72,36,'IAS',spd*36*0.621371,250,'mph','#ff0');
   drawGauge(w*0.65,h*0.72,36,'V/S',droneVY*60,200,'m/m','#f80');
   drawGauge(w*0.82,h*0.72,36,'HDG',(droneYaw*180/Math.PI+360)%360,360,'deg','#0af');
   X.strokeStyle='#888';X.lineWidth=2;
@@ -1436,7 +1436,7 @@ function drawHeliCockpit(){
   X.fillStyle='rgba(0,255,255,0.4)';X.font='bold 10px monospace';X.textAlign='left';
   X.fillText(HELI_TYPES[heliType].name.toUpperCase(),w*0.02,h*0.98);
   X.textAlign='right';
-  X.fillText(Math.round(droneY)+'m / '+Math.round(spd*36)+'km/h',w*0.98,h*0.98);
+  X.fillText(Math.round(droneY)+'m / '+Math.round(spd*36*0.621371)+'mph',w*0.98,h*0.98);
   X.textAlign='left';
 }
 
