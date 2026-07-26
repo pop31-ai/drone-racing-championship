@@ -1237,7 +1237,7 @@ function render(){
   requestAnimationFrame(render);
   X.fillStyle='#060612';X.fillRect(0,0,W,H);
 
-  if(state==='menu'){toMenu();return;}
+  if(state==='menu')return;
   if(state==='countdown'){
     cdTimer+=1/60;
     if(cdTimer>=1){cdTimer=0;cdCount--;if(cdCount<-1){state='racing';document.getElementById('ctrl-hint').style.display='';setTimeout(function(){document.getElementById('ctrl-hint').style.display='none';},4000);}}
