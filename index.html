@@ -1381,37 +1381,102 @@ function drawHeliCockpit(){
   drawGauge(w*0.65,h*0.72,36,'V/S',droneVY*60,200,'m/m','#f80');
   drawGauge(w*0.82,h*0.72,36,'HDG',(droneYaw*180/Math.PI+360)%360,360,'°','#0af');
 
-  X.strokeStyle='#888';X.lineWidth=2;
-  X.beginPath();X.moveTo(w*0.5-20,h*0.85);X.lineTo(w*0.5+20,h*0.85);X.lineTo(w*0.5+8,h*0.92);X.lineTo(w*0.5-8,h*0.92);X.closePath();X.stroke();
-  X.strokeStyle='#666';X.lineWidth=1;
-  X.beginPath();X.moveTo(w*0.5,h*0.85);X.lineTo(w*0.5-droneRoll*40,h*0.92);X.stroke();
+  function drawSwitch(bx,by,bw,bh,label,active,col){
+    X.fillStyle='#222';
+    X.beginPath();
+    X.roundRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4,3);
+    X.fill();
+    X.strokeStyle='#555';X.lineWidth=1;
+    X.beginPath();X.roundRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4,3);X.stroke();
+    if(active){
+      X.fillStyle=col||'#0f0';
+      X.beginPath();X.roundRect(bx-bw/2,by-bh/2,bw,bh,2);X.fill();
+      X.shadowColor=col||'#0f0';X.shadowBlur=6;
+      X.fillStyle=col||'#0f0';
+      X.fillRect(bx-bw*0.35,by-bh*0.35,bw*0.7,bh*0.7);
+      X.shadowBlur=0;
+    }else{
+      X.fillStyle='#333';
+      X.beginPath();X.roundRect(bx-bw/2,by-bh/2,bw,bh,2);X.fill();
+      X.fillStyle='#2a2a2a';
+      X.fillRect(bx-bw*0.35,by-bh*0.15,bw*0.7,bh*0.3);
+    }
+    X.fillStyle=active?'#fff':'#666';X.font='bold '+(bh*0.4)+'px monospace';X.textAlign='center';X.textBaseline='middle';
+    X.fillText(label,bx,by+bh*0.55);
+    X.textBaseline='alphabetic';
+  }
 
-  X.strokeStyle='#555';X.lineWidth=1.5;
-  X.strokeRect(w*0.14,h*0.52,w*0.04,h*0.03);
-  X.strokeRect(w*0.22,h*0.52,w*0.04,h*0.03);
-  X.strokeRect(w*0.30,h*0.52,w*0.04,h*0.03);
-  X.strokeRect(w*0.38,h*0.52,w*0.04,h*0.03);
-  X.fillStyle=keys['KeyR']?'#0f0':'#333';
-  X.fillRect(w*0.15,h*0.525,w*0.02,h*0.02);
-  X.fillStyle=keys['KeyF']?'#f80':'#333';
-  X.fillRect(w*0.23,h*0.525,w*0.02,h*0.02);
-  X.fillStyle=keys['KeyQ']?'#0ff':'#333';
-  X.fillRect(w*0.31,h*0.525,w*0.02,h*0.02);
-  X.fillStyle=keys['KeyE']?'#f0f':'#333';
-  X.fillRect(w*0.39,h*0.525,w*0.02,h*0.02);
+  function drawToggle(bx,by,up2,label,active){
+    var tw=4,th=14;
+    X.fillStyle='#1a1a1a';
+    X.beginPath();X.roundRect(bx-tw-2,by-th-2,tw*2+4,th*2+8,2);X.fill();
+    X.strokeStyle='#444';X.lineWidth=0.8;
+    X.beginPath();X.roundRect(bx-tw-2,by-th-2,tw*2+4,th*2+8,2);X.stroke();
+    X.strokeStyle='#333';X.lineWidth=1;
+    X.beginPath();X.moveTo(bx-tw-1,by+1);X.lineTo(bx+tw+1,by+1);X.stroke();
+    X.fillStyle=active?'#ddd':'#888';
+    X.fillRect(bx-tw,by+(up2?-th:2),tw*2,th);
+    X.fillStyle='#666';X.font='7px monospace';X.textAlign='center';
+    X.fillText(label,bx,by+th+12);
+  }
 
-  X.fillStyle='#888';X.font='7px monospace';X.textAlign='center';
-  X.fillText('RU',w*0.16,h*0.55);
-  X.fillText('DN',w*0.24,h*0.55);
-  X.fillText('YAW',w*0.32,h*0.55);
-  X.fillText('YAW',w*0.40,h*0.55);
+  function drawRoundBtn(bx,by,r,label,active,col){
+    X.fillStyle='#1a1a1a';X.beginPath();X.arc(bx,by,r+3,0,Math.PI*2);X.fill();
+    X.strokeStyle='#444';X.lineWidth=1;X.beginPath();X.arc(bx,by,r+3,0,Math.PI*2);X.stroke();
+    X.fillStyle=active?(col||'#0f0'):'#333';X.beginPath();X.arc(bx,by,r,0,Math.PI*2);X.fill();
+    if(active){X.shadowColor=col||'#0f0';X.shadowBlur=8;X.beginPath();X.arc(bx,by,r,0,Math.PI*2);X.fill();X.shadowBlur=0;}
+    X.fillStyle='#555';X.beginPath();X.arc(bx,by,r-2,0,Math.PI*2);X.stroke();
+    X.fillStyle=active?'#fff':'#555';X.font='bold '+(r*0.6)+'px monospace';X.textAlign='center';X.textBaseline='middle';
+    X.fillText(label,bx,by);X.textBaseline='alphabetic';
+  }
 
-  X.fillStyle=keys['ShiftLeft']?'#0f0':'#333';
-  X.fillRect(w*0.86,h*0.52,w*0.06,h*0.03);X.strokeStyle='#555';X.strokeRect(w*0.86,h*0.52,w*0.06,h*0.03);
-  X.fillStyle='#888';X.font='6px monospace';X.fillText('THR',w*0.89,h*0.55);
-  X.fillStyle=keys['Space']?'#f80':'#333';
-  X.fillRect(w*0.86,h*0.555,w*0.06,h*0.03);X.strokeStyle='#555';X.strokeRect(w*0.86,h*0.555,w*0.06,h*0.03);
-  X.fillStyle='#888';X.fillText('BST',w*0.89,h*0.585);
+  var sy=h*0.66;
+  drawSwitch(w*0.06,sy,16,10,'R ↑',keys['KeyR'],'#0f0');
+  drawSwitch(w*0.11,sy,16,10,'F ↓',keys['KeyF'],'#f80');
+  drawSwitch(w*0.16,sy,16,10,'Q ◄',keys['KeyQ'],'#0ff');
+  drawSwitch(w*0.21,sy,16,10,'E ►',keys['KeyE'],'#f0f');
+
+  drawRoundBtn(w*0.28,sy,7,'W',keys['KeyW'],'#0ff');
+  drawRoundBtn(w*0.32,sy,7,'S',keys['KeyS'],'#0ff');
+  drawRoundBtn(w*0.36,sy,7,'A',keys['KeyA'],'#0ff');
+  drawRoundBtn(w*0.40,sy,7,'D',keys['KeyD'],'#0ff');
+
+  drawToggle(w*0.48,sy-4,keys['ShiftLeft'],'THR',keys['ShiftLeft']);
+  drawToggle(w*0.52,sy-4,keys['Space'],'BST',keys['Space']);
+
+  var sy2=h*0.78;
+  drawRoundBtn(w*0.06,sy2,7,'V',keys['KeyV'],'#f0f');
+  drawRoundBtn(w*0.10,sy2,7,'C',keys['KeyC'],'#ff0');
+  drawRoundBtn(w*0.14,sy2,7,'F1',debugOn,'#f44');
+
+  drawSwitch(w*0.20,sy2,14,8,'NAV',true,'#0af');
+  drawSwitch(w*0.25,sy2,14,8,'EXT',opSettings.fog,'#f80');
+  drawSwitch(w*0.30,sy2,14,8,'SND',opSettings.sound,'#0f0');
+  drawSwitch(w*0.35,sy2,14,8,'SPD',opSettings.speedLines,'#ff0');
+  drawSwitch(w*0.40,sy2,14,8,'PAR',opSettings.particles,'#f0f');
+
+  X.fillStyle='#333';X.fillRect(w*0.46,sy2-12,w*0.14,24);
+  X.strokeStyle='#555';X.lineWidth=1;X.strokeRect(w*0.46,sy2-12,w*0.14,24);
+  X.fillStyle='#0ff';X.font='bold 8px monospace';X.textAlign='center';
+  X.fillText('BOOST',w*0.53,sy2-2);
+  X.fillStyle=boostFuel<20?'#f00':'#0f0';
+  X.fillRect(w*0.47,sy2+2,w*0.12*boostFuel/100,6);
+  X.strokeStyle='#444';X.strokeRect(w*0.47,sy2+2,w*0.12,6);
+
+  X.fillStyle='#333';X.fillRect(w*0.62,sy2-12,w*0.14,24);
+  X.strokeStyle='#555';X.strokeRect(w*0.62,sy2-12,w*0.14,24);
+  X.fillStyle='#0ff';X.font='bold 8px monospace';X.fillText('BAT',w*0.69,sy2-2);
+  X.fillStyle='#0f0';
+  var bat=Math.max(0,100-raceTime*0.15);
+  X.fillRect(w*0.63,sy2+2,w*0.12*bat/100,6);
+  X.strokeStyle='#444';X.strokeRect(w*0.63,sy2+2,w*0.12,6);
+
+  X.fillStyle='#888';X.font='7px monospace';X.textAlign='left';
+  X.fillText('CONTROLS:',w*0.02,h*0.64);
+  X.fillText('FLIGHT:',w*0.26,h*0.64);
+  X.fillText('MODES:',w*0.18,h*0.76);
+  X.fillText('SYSTEMS:',w*0.46,h*0.76);
+  X.textAlign='left';
 
   X.fillStyle='rgba(0,255,255,0.4)';X.font='bold 10px monospace';X.textAlign='left';
   X.fillText(HELI_TYPES[heliType].name.toUpperCase(),w*0.02,h*0.98);
