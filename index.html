@@ -1230,7 +1230,7 @@ function sBtn(id,code){
 sBtn('btn-thr','ShiftLeft');
 sBtn('btn-bst','Space');
 
-addEventListener('keydown',function(e){keys[e.code]=true;if(e.code==='Escape')togglePause();if(e.code==='Tab'){e.preventDefault();toggleOpPanel();}initAudio();});
+addEventListener('keydown',function(e){keys[e.code]=true;if(e.code==='Escape')togglePause();if(e.code==='Tab'){e.preventDefault();toggleOpPanel();}if(e.code==='KeyV'&&state==='racing'){heliMode=!heliMode;droneVY=0;droneVX*=0.3;droneVZ*=0.3;droneY=heliMode?15:1;}initAudio();});
 addEventListener('keyup',function(e){keys[e.code]=false;});
 
 function render(){
