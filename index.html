@@ -584,11 +584,13 @@ var collideFlash=0;
 function checkWallCollision(){
   if(trackSmooth.length<2)return false;
   var minD=1e9,bestI=0,bestT=0;
-  for(var i=0;i<trackSmooth.length;i+=3){
+  for(var i=0;i<trackSmooth.length;i+=2){
     var a=trackSmooth[i],b=trackSmooth[(i+1)%trackSmooth.length];
     var abx=b[0]-a[0],abz=b[2]-a[2];
+    var len2=abx*abx+abz*abz;
+    if(len2<0.01)continue;
     var apx=droneX-a[0],apz=droneZ-a[2];
-    var t=Math.max(0,Math.min(1,(apx*abx+apz*abz)/(abx*abx+abz*abz)));
+    var t=Math.max(0,Math.min(1,(apx*abx+apz*abz)/len2));
     var cx2=a[0]+abx*t,cz=a[2]+abz*t;
     var dx=droneX-cx2,dz=droneZ-cz;
     var d=Math.sqrt(dx*dx+dz*dz);
@@ -602,14 +604,17 @@ function checkWallCollision(){
     var dx=droneX-cx2,dz=droneZ-cz;
     var d=Math.sqrt(dx*dx+dz*dz)||1;
     var nx=dx/d,nz=dz/d;
-    droneX=cx2+nx*wallR;droneZ=cz+nz*wallR;
+    var push=minD-wallR+0.5;
+    droneX=cx2+nx*(wallR+0.5);droneZ=cz+nz*(wallR+0.5);
     var vn=droneVX*nx+droneVZ*nz;
-    if(vn>0){droneVX-=vn*nx*1.8;droneVZ-=vn*nz*1.8;droneVX*=0.6;droneVZ*=0.6;}
-    collideFlash=0.4;
+    if(vn>0){droneVX-=vn*nx*1.2;droneVZ-=vn*nz*1.2;}
+    droneVX*=0.85;droneVZ*=0.85;
+    droneX+=nx*0.5;droneZ+=nz*0.5;
+    collideFlash=0.3;
     if(opSettings.particles){
-      for(var i=0;i<8;i++){
+      for(var i=0;i<6;i++){
         var ang=Math.random()*Math.PI*2;
-        particles.push({x:droneX,y:droneY,z:droneZ,life:0.8,vx:Math.cos(ang)*(1+Math.random()*2),vy:(Math.random()-.5)*2,vz:Math.sin(ang)*(1+Math.random()*2),color:'255,100,50',size:2+Math.random()*2});
+        particles.push({x:droneX,y:droneY,z:droneZ,life:0.6,vx:Math.cos(ang)*(1+Math.random()),vy:(Math.random()-.5),vz:Math.sin(ang)*(1+Math.random()),color:'255,100,50',size:1.5+Math.random()});
       }
     }
     playSound('crash');
