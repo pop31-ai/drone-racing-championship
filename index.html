@@ -1328,15 +1328,8 @@ function render(){
 function getCam(){
   var fwdX=Math.sin(droneYaw),fwdZ=Math.cos(droneYaw);
   if(camMode==='chase'){
-    var tx=droneX-fwdX*8,tz=droneZ-fwdZ*8;
-    camX+=(tx-camX)*0.2;camZ+=(tz-camZ)*0.2;
-    var idealY=droneY+3.5;
-    camY+=(idealY-camY)*0.15;
-    var lx=droneX-camX,lz=droneZ-camZ;
-    var la=Math.atan2(lx,lz);
-    var ld=Math.sqrt(lx*lx+lz*lz);
-    var lp=-Math.atan2(droneY+0.5-camY,Math.max(ld,0.1));
-    camYaw=la;camPitch=lp;
+    camX=droneX-fwdX*8;camZ=droneZ-fwdZ*8;camY=droneY+3.5;
+    camYaw=droneYaw;camPitch=0.1;
     return{x:camX,y:camY,z:camZ,yw:camYaw,cp:camPitch};
   }else if(camMode==='fpv'){
     return{x:droneX,y:droneY+0.5,z:droneZ,yw:droneYaw,cp:dronePitch*0.5};
