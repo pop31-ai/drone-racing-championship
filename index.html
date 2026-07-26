@@ -650,6 +650,8 @@ function updatePhysics(dt){
   droneVX+=(rX*mx+fwdX*(-mz))*ac*sm;
   droneVZ+=(rZ*mx+fwdZ*(-mz))*ac*sm;
   droneVX*=dr;droneVZ*=dr;
+  var spdYaw=Math.sqrt(droneVX*droneVX+droneVZ*droneVZ);
+  if(spdYaw>0.3&&turn!==0){droneVX+=rX*(-turn)*spdYaw*0.04;droneVZ+=rZ*(-turn)*spdYaw*0.04;}
   droneVY+=((-8+thr*12+15-15)*dt);
   droneVY*=0.95;
   var spd=Math.sqrt(droneVX*droneVX+droneVZ*droneVZ);
@@ -1083,42 +1085,80 @@ function drawCorridor3D(cx,cy,cz,cyaw,cpitch){
   var wallH=heliMode?12:6;
   var col=TRACKS[curTrack].color;
   var step=heliMode?6:4;
-  for(var side=-1;side<=1;side+=2){
-    for(var i=0;i<trackSmooth.length;i+=step){
-      var p=trackSmooth[i];
-      var p2=trackSmooth[(i+1)%trackSmooth.length];
-      var dx=p2[0]-p[0],dz=p2[2]-p[2];
-      var l=Math.sqrt(dx*dx+dz*dz)||1;
-      var nx=-dz/l*12*side,nz=dx/l*12*side;
-      var sBot=project(p[0]+nx,p[1],p[2]+nz,cx,cy,cz,cyaw,cpitch);
-      var sTop=project(p[0]+nx,p[1]+wallH,p[2]+nz,cx,cy,cz,cyaw,cpitch);
-      var p2nx=p2[0]+nx,p2nz=p2[2]+nz;
-      var s2Bot=project(p2nx,p2[1],p2nz,cx,cy,cz,cyaw,cpitch);
-      var s2Top=project(p2nx,p2[1]+wallH,p2nz,cx,cy,cz,cyaw,cpitch);
-      if(sBot&&sTop&&s2Bot&&s2Top&&sBot.z<250){
-        var dist=Math.sqrt((p[0]-cx)*(p[0]-cx)+(p[2]-cz)*(p[2]-cz));
-        var fog=Math.max(0.05,1-dist/250);
-        X.globalAlpha=fog*0.12;X.strokeStyle=col;X.lineWidth=0.5;
-        X.beginPath();X.moveTo(sBot.x,sBot.y);X.lineTo(sTop.x,sTop.y);X.stroke();
-        X.beginPath();X.moveTo(sBot.x,sBot.y);X.lineTo(s2Bot.x,s2Bot.y);X.stroke();
-        X.beginPath();X.moveTo(sTop.x,sTop.y);X.lineTo(s2Top.x,s2Top.y);X.stroke();
-      }
-    }
-  }
-  X.globalAlpha=1;
-  for(var i=0;i<trackSmooth.length;i+=step*2){
+  var hw=12;
+
+  for(var i=0;i<trackSmooth.length;i+=step){
     var p=trackSmooth[i];
     var p2=trackSmooth[(i+1)%trackSmooth.length];
     var dx=p2[0]-p[0],dz=p2[2]-p[2];
     var l=Math.sqrt(dx*dx+dz*dz)||1;
-    var nx=-dz/l*12,nz=dx/l*12;
-    var sL=project(p[0]-nx,p[1]+wallH,p[2]-nz,cx,cy,cz,cyaw,cpitch);
-    var sR=project(p[0]+nx,p[1]+wallH,p[2]+nz,cx,cy,cz,cyaw,cpitch);
-    if(sL&&sR&&sL.z<250){
-      var dist=Math.sqrt((p[0]-cx)*(p[0]-cx)+(p[2]-cz)*(p[2]-cz));
-      var fog=Math.max(0,1-dist/250);
-      X.globalAlpha=fog*0.06;X.strokeStyle=col;X.lineWidth=0.5;
-      X.beginPath();X.moveTo(sL.x,sL.y);X.lineTo(sR.x,sR.y);X.stroke();
+    var nx=-dz/l*hw,nz=dx/l*hw;
+    var dist=Math.sqrt((p[0]-cx)*(p[0]-cx)+(p[2]-cz)*(p[2]-cz));
+    var fog=Math.max(0.05,1-dist/200);
+
+    var sBL=project(p[0]-nx,p[1],p[2]-nz,cx,cy,cz,cyaw,cpitch);
+    var sBR=project(p[0]+nx,p[1],p[2]+nz,cx,cy,cz,cyaw,cpitch);
+    var sTL=project(p[0]-nx,p[1]+wallH,p[2]-nz,cx,cy,cz,cyaw,cpitch);
+    var sTR=project(p[0]+nx,p[1]+wallH,p[2]+nz,cx,cy,cz,cyaw,cpitch);
+    var p2nx=p2[0]+nx,p2nz=p2[2]+nz,p2nx2=p2[0]-nx,p2nz2=p2[2]-nz;
+    var s2BL=project(p2nx2,p2[1],p2nz2,cx,cy,cz,cyaw,cpitch);
+    var s2BR=project(p2nx,p2[1],p2nz,cx,cy,cz,cyaw,cpitch);
+    var s2TL=project(p2nx2,p2[1]+wallH,p2nz2,cx,cy,cz,cyaw,cpitch);
+    var s2TR=project(p2nx,p2[1]+wallH,p2nz,cx,cy,cz,cyaw,cpitch);
+
+    if(sBL&&sBR&&s2BL&&s2BR&&sBL.z<200){
+      X.globalAlpha=fog*0.04;
+      X.fillStyle=col;
+      X.beginPath();X.moveTo(sBL.x,sBL.y);X.lineTo(sBR.x,sBR.y);X.lineTo(s2BR.x,s2BR.y);X.lineTo(s2BL.x,s2BL.y);X.closePath();X.fill();
+    }
+    if(sTL&&sTR&&s2TL&&s2TR&&sTL.z<200){
+      X.globalAlpha=fog*0.03;
+      X.fillStyle=col;
+      X.beginPath();X.moveTo(sTL.x,sTL.y);X.lineTo(sTR.x,sTR.y);X.lineTo(s2TR.x,s2TR.y);X.lineTo(s2TL.x,s2TL.y);X.closePath();X.fill();
+    }
+    if(sBL&&sTL&&s2BL&&s2TL&&sBL.z<200){
+      X.globalAlpha=fog*0.04;
+      X.fillStyle=col;
+      X.beginPath();X.moveTo(sBL.x,sBL.y);X.lineTo(sTL.x,sTL.y);X.lineTo(s2TL.x,s2TL.y);X.lineTo(s2BL.x,s2BL.y);X.closePath();X.fill();
+    }
+    if(sBR&&sTR&&s2BR&&s2TR&&sBR.z<200){
+      X.globalAlpha=fog*0.04;
+      X.fillStyle=col;
+      X.beginPath();X.moveTo(sBR.x,sBR.y);X.lineTo(sTR.x,sTR.y);X.lineTo(s2TR.x,s2TR.y);X.lineTo(s2BR.x,s2BR.y);X.closePath();X.fill();
+    }
+  }
+  X.globalAlpha=1;
+
+  for(var i=0;i<trackSmooth.length;i+=step){
+    var p=trackSmooth[i];
+    var p2=trackSmooth[(i+1)%trackSmooth.length];
+    var dx=p2[0]-p[0],dz=p2[2]-p[2];
+    var l=Math.sqrt(dx*dx+dz*dz)||1;
+    var nx=-dz/l*hw,nz=dx/l*hw;
+    var dist=Math.sqrt((p[0]-cx)*(p[0]-cx)+(p[2]-cz)*(p[2]-cz));
+    var fog=Math.max(0.08,1-dist/200);
+    var pulse=0.6+Math.sin(raceTime*3+i*0.3)*0.4;
+
+    var sBL=project(p[0]-nx,p[1],p[2]-nz,cx,cy,cz,cyaw,cpitch);
+    var sBR=project(p[0]+nx,p[1],p[2]+nz,cx,cy,cz,cyaw,cpitch);
+    var sTL=project(p[0]-nx,p[1]+wallH,p[2]-nz,cx,cy,cz,cyaw,cpitch);
+    var sTR=project(p[0]+nx,p[1]+wallH,p[2]+nz,cx,cy,cz,cyaw,cpitch);
+
+    if(sBL&&sBR&&sBL.z<200){
+      X.globalAlpha=fog*0.8*pulse;X.strokeStyle=col;X.lineWidth=1.5;
+      X.beginPath();X.moveTo(sBL.x,sBL.y);X.lineTo(sBR.x,sBR.y);X.stroke();
+    }
+    if(sTL&&sTR&&sTL.z<200){
+      X.globalAlpha=fog*0.6*pulse;X.strokeStyle=col;X.lineWidth=1.2;
+      X.beginPath();X.moveTo(sTL.x,sTL.y);X.lineTo(sTR.x,sTR.y);X.stroke();
+    }
+    if(sBL&&sTL&&sBL.z<200){
+      X.globalAlpha=fog*0.7;X.strokeStyle=col;X.lineWidth=1;
+      X.beginPath();X.moveTo(sBL.x,sBL.y);X.lineTo(sTL.x,sTL.y);X.stroke();
+    }
+    if(sBR&&sTR&&sBR.z<200){
+      X.globalAlpha=fog*0.7;X.strokeStyle=col;X.lineWidth=1;
+      X.beginPath();X.moveTo(sBR.x,sBR.y);X.lineTo(sTR.x,sTR.y);X.stroke();
     }
   }
   X.globalAlpha=1;
