@@ -709,21 +709,23 @@ function drawDrone3D(cx,cy,cz,cyaw,cpitch){
 
   X.fillStyle='#1a1a2e';
   X.beginPath();
-  X.moveTo(0,-sz*.35);X.lineTo(sz*.3,0);X.lineTo(0,sz*.35);X.lineTo(-sz*.3,0);X.closePath();
+  X.ellipse(0,0,sz*.35,sz*.12,0,0,Math.PI*2);
   X.fill();X.strokeStyle='#0ff';X.lineWidth=Math.max(1,sz*0.05);X.stroke();
 
-  [[-1,-1],[-1,1],[1,-1],[1,1]].forEach(function(v){
-    X.strokeStyle='rgba(0,255,255,0.5)';X.lineWidth=Math.max(1,sz*0.04);
-    X.beginPath();X.moveTo(0,0);X.lineTo(v[0]*sz*.75,v[1]*sz*.55);X.stroke();
-  });
-  [[-1,-1],[-1,1],[1,-1],[1,1]].forEach(function(v){
-    X.fillStyle='rgba(0,255,255,0.7)';X.beginPath();X.arc(v[0]*sz*.75,v[1]*sz*.55,sz*.18,0,Math.PI*2);X.fill();
+  X.strokeStyle='rgba(0,255,255,0.5)';X.lineWidth=Math.max(1,sz*0.04);
+  X.beginPath();X.moveTo(-sz*.35,0);X.lineTo(-sz*.8,-sz*.3);X.stroke();
+  X.beginPath();X.moveTo(sz*.35,0);X.lineTo(sz*.8,-sz*.3);X.stroke();
+  X.beginPath();X.moveTo(-sz*.35,0);X.lineTo(-sz*.8,sz*.3);X.stroke();
+  X.beginPath();X.moveTo(sz*.35,0);X.lineTo(sz*.8,sz*.3);X.stroke();
+
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(v){
+    X.fillStyle='rgba(0,255,255,0.7)';X.beginPath();X.arc(v[0]*sz*.8,v[1]*sz*.3,sz*.15,0,Math.PI*2);X.fill();
     X.strokeStyle='#0ff';X.lineWidth=Math.max(0.5,sz*0.03);X.stroke();
   });
 
-  X.fillStyle='#ff0';X.beginPath();X.arc(0,-sz*.28,sz*.04,0,Math.PI*2);X.fill();
-  X.fillStyle='#f00';X.beginPath();X.arc(0,sz*.28,sz*.03,0,Math.PI*2);X.fill();
-  X.fillStyle='#0ff';X.fillRect(-sz*.15,-sz*.05,sz*.3,sz*.04);
+  X.fillStyle='#ff0';X.beginPath();X.arc(0,-sz*.12,sz*.03,0,Math.PI*2);X.fill();
+  X.fillStyle='#f00';X.beginPath();X.arc(0,sz*.12,sz*.025,0,Math.PI*2);X.fill();
+  X.fillStyle='#0ff';X.fillRect(-sz*.12,-sz*.015,sz*.24,sz*.03);
 
   var thr=0;if(keys['ShiftLeft']||keys['ShiftRight'])thr=1;
   if(thr>0.5){
