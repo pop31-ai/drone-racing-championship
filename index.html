@@ -137,7 +137,7 @@ button{font-family:inherit}
     <button class="btn" id="bf">Free Race</button>
     <button class="btn p" id="bc">Championship</button>
   </div>
-  <div style="margin-top:12px;color:#555;font-size:10px">WASD + QE + Shift + Space | Gamepad | Touch</div>
+  <div style="margin-top:12px;color:#555;font-size:10px">WASD + QE + RF + Shift + Space | V=Heli | C=Camera | F1=Debug</div>
 </div>
 
 <div id="hud" style="display:none">
@@ -158,8 +158,8 @@ button{font-family:inherit}
   <button class="btn" id="bq">Quit to Menu</button>
 </div>
 <div id="ctrl-hint">
-  <div class="cg"><span class="k">W</span><span class="k">A</span><span class="k">S</span><span class="k">D</span> Move &nbsp; <span class="k">Q</span><span class="k">E</span> Rotate</div>
-  <div class="cg"><span class="k">Shift</span> Throttle &nbsp; <span class="k">Space</span> Boost</div>
+  <div class="cg"><span class="k">W</span><span class="k">A</span><span class="k">S</span><span class="k">D</span> Move &nbsp; <span class="k">Q</span><span class="k">E</span> Yaw &nbsp; <span class="k">R</span><span class="k">F</span> Up/Down</div>
+  <div class="cg"><span class="k">Shift</span> Throttle &nbsp; <span class="k">Space</span> Boost &nbsp; <span class="k">V</span> Drone/Heli</div>
 </div>
 <div id="res-ov">
   <div class="rt" id="rt2">Race Complete</div>
@@ -635,12 +635,13 @@ function updatePhysics(dt){
   if(diff==='easy'){ac*=1.3;dr=0.96;rt=0.06;}
   if(diff==='hard'){ac*=0.7;dr=0.995;rt=0.028;}
 
-  var mx=0,mz=0,turn=0,thr=0,bst=0;
+  var mx=0,mz=0,turn=0,thr=0,bst=0,vup=0;
   if(keys['KeyW']||keys['ArrowUp'])mz=-1;if(keys['KeyS']||keys['ArrowDown'])mz=1;
   if(keys['KeyA'])mx=-1;if(keys['KeyD'])mx=1;
   if(keys['KeyQ'])turn=-1;if(keys['KeyE'])turn=1;if(keys['ArrowLeft'])turn=1;if(keys['ArrowRight'])turn=-1;
   if(keys['ShiftLeft']||keys['ShiftRight'])thr=1;
   if(keys['Space']&&boostFuel>0){bst=1;}
+  if(keys['KeyR'])vup=1;if(keys['KeyF'])vup=-1;
   mx=Math.max(-1,Math.min(1,mx+(jlAct.a?jlAct.x:0)));
   mz=Math.max(-1,Math.min(1,mz+(jlAct.a?jlAct.y:0)));
   turn=Math.max(-1,Math.min(1,turn+(jrAct.a?jrAct.x:0)));
@@ -658,7 +659,7 @@ function updatePhysics(dt){
   droneVX*=dr;droneVZ*=dr;
   var spdYaw=Math.sqrt(droneVX*droneVX+droneVZ*droneVZ);
   if(spdYaw>0.3&&turn!==0){droneVX+=rX*(-turn)*spdYaw*0.04;droneVZ+=rZ*(-turn)*spdYaw*0.04;}
-  droneVY+=((-8+thr*12+15-15)*dt);
+  droneVY+=((-8+thr*12+vup*6)*dt);
   droneVY*=0.95;
   var spd=Math.sqrt(droneVX*droneVX+droneVZ*droneVZ);
   var ms=5*(bst>0?1.5:1);
@@ -1176,12 +1177,13 @@ function updateHeliPhysics(dt){
   if(diff==='easy'){ac*=1.3;dr=0.95;rt=0.05;}
   if(diff==='hard'){ac*=0.7;dr=0.99;rt=0.02;}
 
-  var mx=0,mz=0,turn=0,thr=0,bst=0;
+  var mx=0,mz=0,turn=0,thr=0,bst=0,vup=0;
   if(keys['KeyW']||keys['ArrowUp'])mz=-1;if(keys['KeyS']||keys['ArrowDown'])mz=1;
   if(keys['KeyA'])mx=-1;if(keys['KeyD'])mx=1;
   if(keys['KeyQ'])turn=-1;if(keys['KeyE'])turn=1;if(keys['ArrowLeft'])turn=1;if(keys['ArrowRight'])turn=-1;
   if(keys['ShiftLeft']||keys['ShiftRight'])thr=1;
   if(keys['Space']&&boostFuel>0){bst=1;}
+  if(keys['KeyR'])vup=1;if(keys['KeyF'])vup=-1;
   mx=Math.max(-1,Math.min(1,mx+(jlAct.a?jlAct.x:0)));
   mz=Math.max(-1,Math.min(1,mz+(jlAct.a?jlAct.y:0)));
   turn=Math.max(-1,Math.min(1,turn+(jrAct.a?jrAct.x:0)));
@@ -1199,7 +1201,7 @@ function updateHeliPhysics(dt){
   droneVZ+=(rZ*mx+fwdZ*(-mz))*ac*sm;
   droneVX*=dr;droneVZ*=dr;
 
-  var lift=(thr-0.5)*12;
+  var lift=(thr-0.5)*12+vup*8;
   droneVY+=(-9.8+lift)*dt;
   droneVY*=0.92;
   droneX+=droneVX;droneZ+=droneVZ;
@@ -1548,7 +1550,7 @@ function render(){
     X.fillStyle=cdCount>0?'#0ff':'#0f0';X.font='bold 100px sans-serif';X.textAlign='center';X.textBaseline='middle';
     X.fillText(cdCount>0?cdCount:'GO!',W/2,H/2);X.textBaseline='alphabetic';
     X.fillStyle='rgba(0,0,0,0.7)';X.fillRect(W/2-140,H-80,280,30);
-    X.fillStyle='#888';X.font='11px sans-serif';X.textAlign='center';X.fillText('WASD Move | Q/E or Arrows Yaw | Shift Throttle | Space Boost',W/2,H-60);
+    X.fillStyle='#888';X.font='11px sans-serif';X.textAlign='center';X.fillText('WASD Move | Q/E Arrows Yaw | R/F Up/Down | Shift Throttle | Space Boost | V Heli | C Camera',W/2,H-60);
     drawHUD();drawMinimap();updateCPIndicator();
     return;
   }
