@@ -1382,49 +1382,32 @@ function drawHeliCockpit(){
   drawGauge(w*0.82,h*0.72,36,'HDG',(droneYaw*180/Math.PI+360)%360,360,'°','#0af');
 
   function drawSwitch(bx,by,bw,bh,label,active,col){
-    X.fillStyle='#222';
-    X.beginPath();
-    X.roundRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4,3);
-    X.fill();
-    X.strokeStyle='#555';X.lineWidth=1;
-    X.beginPath();X.roundRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4,3);X.stroke();
+    X.fillStyle='#222';X.fillRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4);
+    X.strokeStyle='#555';X.lineWidth=1;X.strokeRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4);
     if(active){
-      X.fillStyle=col||'#0f0';
-      X.beginPath();X.roundRect(bx-bw/2,by-bh/2,bw,bh,2);X.fill();
-      X.shadowColor=col||'#0f0';X.shadowBlur=6;
-      X.fillStyle=col||'#0f0';
-      X.fillRect(bx-bw*0.35,by-bh*0.35,bw*0.7,bh*0.7);
-      X.shadowBlur=0;
+      X.fillStyle=col||'#0f0';X.fillRect(bx-bw/2,by-bh/2,bw,bh);
+      X.fillStyle='#fff';X.fillRect(bx-bw*0.35,by-bh*0.35,bw*0.7,bh*0.7);
     }else{
-      X.fillStyle='#333';
-      X.beginPath();X.roundRect(bx-bw/2,by-bh/2,bw,bh,2);X.fill();
-      X.fillStyle='#2a2a2a';
-      X.fillRect(bx-bw*0.35,by-bh*0.15,bw*0.7,bh*0.3);
+      X.fillStyle='#333';X.fillRect(bx-bw/2,by-bh/2,bw,bh);
+      X.fillStyle='#2a2a2a';X.fillRect(bx-bw*0.35,by-bh*0.15,bw*0.7,bh*0.3);
     }
     X.fillStyle=active?'#fff':'#666';X.font='bold '+(bh*0.4)+'px monospace';X.textAlign='center';X.textBaseline='middle';
-    X.fillText(label,bx,by+bh*0.55);
-    X.textBaseline='alphabetic';
+    X.fillText(label,bx,by+bh*0.55);X.textBaseline='alphabetic';
   }
 
   function drawToggle(bx,by,up2,label,active){
     var tw=4,th=14;
-    X.fillStyle='#1a1a1a';
-    X.beginPath();X.roundRect(bx-tw-2,by-th-2,tw*2+4,th*2+8,2);X.fill();
-    X.strokeStyle='#444';X.lineWidth=0.8;
-    X.beginPath();X.roundRect(bx-tw-2,by-th-2,tw*2+4,th*2+8,2);X.stroke();
-    X.strokeStyle='#333';X.lineWidth=1;
-    X.beginPath();X.moveTo(bx-tw-1,by+1);X.lineTo(bx+tw+1,by+1);X.stroke();
-    X.fillStyle=active?'#ddd':'#888';
-    X.fillRect(bx-tw,by+(up2?-th:2),tw*2,th);
-    X.fillStyle='#666';X.font='7px monospace';X.textAlign='center';
-    X.fillText(label,bx,by+th+12);
+    X.fillStyle='#1a1a1a';X.fillRect(bx-tw-2,by-th-2,tw*2+4,th*2+8);
+    X.strokeStyle='#444';X.lineWidth=0.8;X.strokeRect(bx-tw-2,by-th-2,tw*2+4,th*2+8);
+    X.strokeStyle='#333';X.lineWidth=1;X.beginPath();X.moveTo(bx-tw-1,by+1);X.lineTo(bx+tw+1,by+1);X.stroke();
+    X.fillStyle=active?'#ddd':'#888';X.fillRect(bx-tw,by+(up2?-th:2),tw*2,th);
+    X.fillStyle='#666';X.font='7px monospace';X.textAlign='center';X.fillText(label,bx,by+th+12);
   }
 
   function drawRoundBtn(bx,by,r,label,active,col){
     X.fillStyle='#1a1a1a';X.beginPath();X.arc(bx,by,r+3,0,Math.PI*2);X.fill();
     X.strokeStyle='#444';X.lineWidth=1;X.beginPath();X.arc(bx,by,r+3,0,Math.PI*2);X.stroke();
     X.fillStyle=active?(col||'#0f0'):'#333';X.beginPath();X.arc(bx,by,r,0,Math.PI*2);X.fill();
-    if(active){X.shadowColor=col||'#0f0';X.shadowBlur=8;X.beginPath();X.arc(bx,by,r,0,Math.PI*2);X.fill();X.shadowBlur=0;}
     X.fillStyle='#555';X.beginPath();X.arc(bx,by,r-2,0,Math.PI*2);X.stroke();
     X.fillStyle=active?'#fff':'#555';X.font='bold '+(r*0.6)+'px monospace';X.textAlign='center';X.textBaseline='middle';
     X.fillText(label,bx,by);X.textBaseline='alphabetic';
