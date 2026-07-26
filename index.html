@@ -505,7 +505,7 @@ function updatePhysics(dt){
   if(droneY<1){droneY=1;droneVY=0;}
   var tp=0.15*mz,trl=-0.15*mx-turn*0.3;
   dronePitch+=(tp-dronePitch)*0.15;droneRoll+=(trl-droneRoll)*0.15;
-  droneVisYaw+=(turn*0.5-droneVisYaw)*0.12;
+  droneVisYaw+=(turn*0.8-droneVisYaw)*0.2;
 
   if(bst>0&&opSettings.particles){
     for(var i=0;i<3;i++){
@@ -945,7 +945,7 @@ function updateHeliPhysics(dt){
   if(droneY>200){droneY=200;droneVY*=-0.3;}
   var tp=0.1*mz,trl=-0.1*mx-turn*0.4;
   dronePitch+=(tp-dronePitch)*0.1;droneRoll+=(trl-droneRoll)*0.1;
-  droneVisYaw+=(turn*0.6-droneVisYaw)*0.1;
+  droneVisYaw+=(turn*0.8-droneVisYaw)*0.2;
 
   if(opSettings.particles&&Math.abs(droneVY)>0.5){
     particles.push({x:droneX+(Math.random()-.5)*.6,y:droneY-1,z:droneZ+(Math.random()-.5)*.6,life:0.8,vx:(Math.random()-.5)*.3,vy:-Math.abs(droneVY)*0.3,vz:(Math.random()-.5)*.3,color:'200,200,200',size:2+Math.random()});
@@ -1307,7 +1307,8 @@ function getCam(){
     camX=droneX-fwdX*8;camZ=droneZ-fwdZ*8;
     var idealY=droneY+3.5;
     camY+=(idealY-camY)*0.15;
-    camYaw=droneYaw;camPitch=0.1;
+    var yawDiff=droneYaw-camYaw;while(yawDiff>Math.PI)yawDiff-=Math.PI*2;while(yawDiff<-Math.PI)yawDiff+=Math.PI*2;
+    camYaw+=yawDiff*0.15;camPitch=0.1;
     return{x:camX,y:camY,z:camZ,yw:camYaw,cp:camPitch};
   }else if(camMode==='fpv'){
     return{x:droneX,y:droneY+0.5,z:droneZ,yw:droneYaw,cp:dronePitch*0.5};
