@@ -1209,7 +1209,7 @@ function updateHeliPhysics(dt){
   droneVZ+=(rZ*mx+fwdZ*(-mz))*ac*sm;
   droneVX*=dr;droneVZ*=dr;
 
-  var lift=(thr-0.5)*12+vup*8;
+  var lift=thr*14+vup*10;
   droneVY+=(-9.8+lift)*dt;
   droneVY*=0.92;
   droneX+=droneVX;droneZ+=droneVZ;
