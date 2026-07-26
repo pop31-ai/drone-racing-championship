@@ -1382,83 +1382,83 @@ function drawHeliCockpit(){
   drawGauge(w*0.82,h*0.72,36,'HDG',(droneYaw*180/Math.PI+360)%360,360,'°','#0af');
 
   function drawSwitch(bx,by,bw,bh,label,active,col){
-    X.fillStyle='#222';X.fillRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4);
-    X.strokeStyle='#555';X.lineWidth=1;X.strokeRect(bx-bw/2-2,by-bh/2-2,bw+4,bh+4);
+    X.fillStyle='#111';X.fillRect(bx-bw/2-3,by-bh/2-3,bw+6,bh+6);
+    X.strokeStyle=active?(col||'#0f0'):'#555';X.lineWidth=active?2:1;X.strokeRect(bx-bw/2-3,by-bh/2-3,bw+6,bh+6);
+    X.fillStyle='#2a2a2a';X.fillRect(bx-bw/2,by-bh/2,bw,bh);
     if(active){
-      X.fillStyle=col||'#0f0';X.fillRect(bx-bw/2,by-bh/2,bw,bh);
-      X.fillStyle='#fff';X.fillRect(bx-bw*0.35,by-bh*0.35,bw*0.7,bh*0.7);
+      X.fillStyle=col||'#0f0';X.fillRect(bx-bw/2+1,by-bh/2+1,bw-2,bh-2);
+      X.fillStyle='#fff';X.fillRect(bx-bw*0.3,by-bh*0.3,bw*0.6,bh*0.6);
     }else{
-      X.fillStyle='#333';X.fillRect(bx-bw/2,by-bh/2,bw,bh);
-      X.fillStyle='#2a2a2a';X.fillRect(bx-bw*0.35,by-bh*0.15,bw*0.7,bh*0.3);
+      X.fillStyle='#333';X.fillRect(bx-bw/2+1,by-bh/2+1,bw-2,bh-2);
+      X.fillStyle='#282828';X.fillRect(bx-bw*0.2,by,bw*0.4,bh*0.35);
     }
-    X.fillStyle=active?'#fff':'#666';X.font='bold '+(bh*0.4)+'px monospace';X.textAlign='center';X.textBaseline='middle';
-    X.fillText(label,bx,by+bh*0.55);X.textBaseline='alphabetic';
+    X.fillStyle=active?'#fff':'#888';X.font='bold 8px monospace';X.textAlign='center';X.textBaseline='middle';
+    X.fillText(label,bx,by+bh*0.6);X.textBaseline='alphabetic';
   }
 
   function drawToggle(bx,by,up2,label,active){
-    var tw=4,th=14;
-    X.fillStyle='#1a1a1a';X.fillRect(bx-tw-2,by-th-2,tw*2+4,th*2+8);
-    X.strokeStyle='#444';X.lineWidth=0.8;X.strokeRect(bx-tw-2,by-th-2,tw*2+4,th*2+8);
-    X.strokeStyle='#333';X.lineWidth=1;X.beginPath();X.moveTo(bx-tw-1,by+1);X.lineTo(bx+tw+1,by+1);X.stroke();
-    X.fillStyle=active?'#ddd':'#888';X.fillRect(bx-tw,by+(up2?-th:2),tw*2,th);
-    X.fillStyle='#666';X.font='7px monospace';X.textAlign='center';X.fillText(label,bx,by+th+12);
+    var tw=5,th=18;
+    X.fillStyle='#111';X.fillRect(bx-tw-4,by-th-4,tw*2+8,th*2+12);
+    X.strokeStyle='#555';X.lineWidth=1;X.strokeRect(bx-tw-4,by-th-4,tw*2+8,th*2+12);
+    X.strokeStyle='#333';X.lineWidth=1;X.beginPath();X.moveTo(bx-tw-2,by+2);X.lineTo(bx+tw+2,by+2);X.stroke();
+    X.fillStyle=active?'#ddd':'#777';X.fillRect(bx-tw,by+(up2?-th:3),tw*2,th);
+    X.fillStyle='#555';X.font='8px monospace';X.textAlign='center';X.fillText(label,bx,by+th+14);
   }
 
   function drawRoundBtn(bx,by,r,label,active,col){
-    X.fillStyle='#1a1a1a';X.beginPath();X.arc(bx,by,r+3,0,Math.PI*2);X.fill();
-    X.strokeStyle='#444';X.lineWidth=1;X.beginPath();X.arc(bx,by,r+3,0,Math.PI*2);X.stroke();
+    X.fillStyle='#111';X.beginPath();X.arc(bx,by,r+4,0,Math.PI*2);X.fill();
+    X.strokeStyle=active?(col||'#0f0'):'#555';X.lineWidth=active?2:1;X.beginPath();X.arc(bx,by,r+4,0,Math.PI*2);X.stroke();
     X.fillStyle=active?(col||'#0f0'):'#333';X.beginPath();X.arc(bx,by,r,0,Math.PI*2);X.fill();
-    X.fillStyle='#555';X.beginPath();X.arc(bx,by,r-2,0,Math.PI*2);X.stroke();
-    X.fillStyle=active?'#fff':'#555';X.font='bold '+(r*0.6)+'px monospace';X.textAlign='center';X.textBaseline='middle';
+    X.fillStyle=active?'#fff':'#666';X.font='bold '+(r*0.7)+'px monospace';X.textAlign='center';X.textBaseline='middle';
     X.fillText(label,bx,by);X.textBaseline='alphabetic';
   }
 
-  var sy=h*0.66;
-  drawSwitch(w*0.06,sy,16,10,'R ↑',keys['KeyR'],'#0f0');
-  drawSwitch(w*0.11,sy,16,10,'F ↓',keys['KeyF'],'#f80');
-  drawSwitch(w*0.16,sy,16,10,'Q ◄',keys['KeyQ'],'#0ff');
-  drawSwitch(w*0.21,sy,16,10,'E ►',keys['KeyE'],'#f0f');
+  var sy=h*0.67;
+  drawSwitch(w*0.05,sy,24,14,'R ↑',keys['KeyR'],'#0f0');
+  drawSwitch(w*0.10,sy,24,14,'F ↓',keys['KeyF'],'#f80');
+  drawSwitch(w*0.15,sy,24,14,'Q ◄',keys['KeyQ'],'#0ff');
+  drawSwitch(w*0.20,sy,24,14,'E ►',keys['KeyE'],'#f0f');
 
-  drawRoundBtn(w*0.28,sy,7,'W',keys['KeyW'],'#0ff');
-  drawRoundBtn(w*0.32,sy,7,'S',keys['KeyS'],'#0ff');
-  drawRoundBtn(w*0.36,sy,7,'A',keys['KeyA'],'#0ff');
-  drawRoundBtn(w*0.40,sy,7,'D',keys['KeyD'],'#0ff');
+  drawRoundBtn(w*0.27,sy,10,'W',keys['KeyW'],'#0ff');
+  drawRoundBtn(w*0.32,sy,10,'S',keys['KeyS'],'#0ff');
+  drawRoundBtn(w*0.37,sy,10,'A',keys['KeyA'],'#0ff');
+  drawRoundBtn(w*0.42,sy,10,'D',keys['KeyD'],'#0ff');
 
-  drawToggle(w*0.48,sy-4,keys['ShiftLeft'],'THR',keys['ShiftLeft']);
-  drawToggle(w*0.52,sy-4,keys['Space'],'BST',keys['Space']);
+  drawToggle(w*0.50,sy-6,keys['ShiftLeft'],'THR',keys['ShiftLeft']);
+  drawToggle(w*0.56,sy-6,keys['Space'],'BST',keys['Space']);
 
-  var sy2=h*0.78;
-  drawRoundBtn(w*0.06,sy2,7,'V',keys['KeyV'],'#f0f');
-  drawRoundBtn(w*0.10,sy2,7,'C',keys['KeyC'],'#ff0');
-  drawRoundBtn(w*0.14,sy2,7,'F1',debugOn,'#f44');
+  var sy2=h*0.80;
+  drawRoundBtn(w*0.05,sy2,10,'V',keys['KeyV'],'#f0f');
+  drawRoundBtn(w*0.10,sy2,10,'C',keys['KeyC'],'#ff0');
+  drawRoundBtn(w*0.15,sy2,10,'F1',debugOn,'#f44');
 
-  drawSwitch(w*0.20,sy2,14,8,'NAV',true,'#0af');
-  drawSwitch(w*0.25,sy2,14,8,'EXT',opSettings.fog,'#f80');
-  drawSwitch(w*0.30,sy2,14,8,'SND',opSettings.sound,'#0f0');
-  drawSwitch(w*0.35,sy2,14,8,'SPD',opSettings.speedLines,'#ff0');
-  drawSwitch(w*0.40,sy2,14,8,'PAR',opSettings.particles,'#f0f');
+  drawSwitch(w*0.22,sy2,20,12,'NAV',true,'#0af');
+  drawSwitch(w*0.28,sy2,20,12,'EXT',opSettings.fog,'#f80');
+  drawSwitch(w*0.34,sy2,20,12,'SND',opSettings.sound,'#0f0');
+  drawSwitch(w*0.40,sy2,20,12,'SPD',opSettings.speedLines,'#ff0');
+  drawSwitch(w*0.46,sy2,20,12,'PAR',opSettings.particles,'#f0f');
 
-  X.fillStyle='#333';X.fillRect(w*0.46,sy2-12,w*0.14,24);
-  X.strokeStyle='#555';X.lineWidth=1;X.strokeRect(w*0.46,sy2-12,w*0.14,24);
+  X.fillStyle='#333';X.fillRect(w*0.52,sy2-14,w*0.16,28);
+  X.strokeStyle='#555';X.lineWidth=1;X.strokeRect(w*0.52,sy2-14,w*0.16,28);
   X.fillStyle='#0ff';X.font='bold 8px monospace';X.textAlign='center';
-  X.fillText('BOOST',w*0.53,sy2-2);
+  X.fillText('BOOST',w*0.60,sy2-3);
   X.fillStyle=boostFuel<20?'#f00':'#0f0';
-  X.fillRect(w*0.47,sy2+2,w*0.12*boostFuel/100,6);
-  X.strokeStyle='#444';X.strokeRect(w*0.47,sy2+2,w*0.12,6);
+  X.fillRect(w*0.53,sy2+3,w*0.14*boostFuel/100,8);
+  X.strokeStyle='#444';X.strokeRect(w*0.53,sy2+3,w*0.14,8);
 
-  X.fillStyle='#333';X.fillRect(w*0.62,sy2-12,w*0.14,24);
-  X.strokeStyle='#555';X.strokeRect(w*0.62,sy2-12,w*0.14,24);
-  X.fillStyle='#0ff';X.font='bold 8px monospace';X.fillText('BAT',w*0.69,sy2-2);
+  X.fillStyle='#333';X.fillRect(w*0.70,sy2-14,w*0.16,28);
+  X.strokeStyle='#555';X.strokeRect(w*0.70,sy2-14,w*0.16,28);
+  X.fillStyle='#0ff';X.font='bold 8px monospace';X.fillText('BAT',w*0.78,sy2-3);
   X.fillStyle='#0f0';
   var bat=Math.max(0,100-raceTime*0.15);
-  X.fillRect(w*0.63,sy2+2,w*0.12*bat/100,6);
-  X.strokeStyle='#444';X.strokeRect(w*0.63,sy2+2,w*0.12,6);
+  X.fillRect(w*0.71,sy2+3,w*0.14*bat/100,8);
+  X.strokeStyle='#444';X.strokeRect(w*0.71,sy2+3,w*0.14,8);
 
-  X.fillStyle='#888';X.font='7px monospace';X.textAlign='left';
-  X.fillText('CONTROLS:',w*0.02,h*0.64);
-  X.fillText('FLIGHT:',w*0.26,h*0.64);
-  X.fillText('MODES:',w*0.18,h*0.76);
-  X.fillText('SYSTEMS:',w*0.46,h*0.76);
+  X.fillStyle='#888';X.font='8px monospace';X.textAlign='left';
+  X.fillText('CONTROLS:',w*0.02,h*0.65);
+  X.fillText('FLIGHT:',w*0.25,h*0.65);
+  X.fillText('MODES:',w*0.02,h*0.78);
+  X.fillText('SYSTEMS:',w*0.52,h*0.78);
   X.textAlign='left';
 
   X.fillStyle='rgba(0,255,255,0.4)';X.font='bold 10px monospace';X.textAlign='left';
