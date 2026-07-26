@@ -309,7 +309,7 @@ var TRACKS=[
 
 var trackRaw=[],trackSmooth=[],checkpoints=[];
 var droneX=0,droneY=3,droneZ=0,droneYaw=0,droneVX=0,droneVY=0,droneVZ=0;
-var dronePitch=0,droneRoll=0;
+var dronePitch=0,droneRoll=0,droneVisYaw=0;
 var camX=0,camY=3,camZ=0,camYaw=0,camPitch=0;
 var state='menu',curTrack=0,champMode=false,totalLaps=25,diff='normal',camMode='chase';
 var heliMode=false;
@@ -505,6 +505,7 @@ function updatePhysics(dt){
   if(droneY<1){droneY=1;droneVY=0;}
   var tp=0.15*mz,trl=-0.15*mx-turn*0.3;
   dronePitch+=(tp-dronePitch)*0.15;droneRoll+=(trl-droneRoll)*0.15;
+  droneVisYaw+=(turn*0.5-droneVisYaw)*0.12;
 
   if(bst>0&&opSettings.particles){
     for(var i=0;i<3;i++){
@@ -692,7 +693,7 @@ function drawDrone3D(cx,cy,cz,cyaw,cpitch){
   var s=project(droneX,droneY,droneZ,cx,cy,cz,cyaw,cpitch);
   if(!s||s.z>100)return;
   var sz=Math.max(4,15*FOV/s.z);
-  var bodyAng=Math.atan2(Math.sin(droneYaw-cyaw),Math.cos(droneYaw-cyaw));
+  var bodyAng=droneVisYaw;
   var visRoll=droneRoll*1.5;
   X.save();X.translate(s.x,s.y);X.rotate(bodyAng+visRoll);
 
@@ -978,7 +979,7 @@ function drawHeli3D(cx,cy,cz,cyaw,cpitch){
   var s=project(droneX,droneY,droneZ,cx,cy,cz,cyaw,cpitch);
   if(!s||s.z>150)return;
   var sz=Math.max(4,18*FOV/s.z);
-  var bodyAng=Math.atan2(Math.sin(droneYaw-cyaw),Math.cos(droneYaw-cyaw));
+  var bodyAng=droneVisYaw;
   var vr=droneRoll*1.2;
   X.save();X.translate(s.x,s.y);X.rotate(bodyAng+vr);
 
