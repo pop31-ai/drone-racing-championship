@@ -312,6 +312,7 @@ var droneX=0,droneY=3,droneZ=0,droneYaw=0,droneVX=0,droneVY=0,droneVZ=0;
 var dronePitch=0,droneRoll=0,droneVisYaw=0;
 var camX=0,camY=3,camZ=0,camYaw=0,camPitch=0;
 var state='menu',curTrack=0,champMode=false,totalLaps=25,diff='normal',camMode='chase';
+var debugOn=false;
 var heliMode=false;
 var raceTime=0,curLap=1,lastLapT=0,bestLap=Infinity,laps=[];
 var lastCP=-1,allCP=false,cpHashes=[];
@@ -1269,7 +1270,7 @@ function sBtn(id,code){
 sBtn('btn-thr','ShiftLeft');
 sBtn('btn-bst','Space');
 
-addEventListener('keydown',function(e){keys[e.code]=true;if(e.code==='Escape')togglePause();if(e.code==='Tab'){e.preventDefault();toggleOpPanel();}if(e.code==='KeyV'&&state==='racing'){heliMode=!heliMode;droneVY=0;droneVX*=0.3;droneVZ*=0.3;droneY=heliMode?15:1;}if(e.code==='KeyC'&&state==='racing'){camMode=camMode==='chase'?'fpv':camMode==='fpv'?'top':'chase';}initAudio();});
+addEventListener('keydown',function(e){keys[e.code]=true;if(e.code==='Escape')togglePause();if(e.code==='Tab'){e.preventDefault();toggleOpPanel();}if(e.code==='KeyV'&&state==='racing'){heliMode=!heliMode;droneVY=0;droneVX*=0.3;droneVZ*=0.3;droneY=heliMode?15:1;}if(e.code==='KeyC'&&state==='racing'){camMode=camMode==='chase'?'fpv':camMode==='fpv'?'top':'chase';}if(e.code==='F1'){e.preventDefault();debugOn=!debugOn;}initAudio();});
 addEventListener('keyup',function(e){keys[e.code]=false;});
 
 function render(){
@@ -1318,11 +1319,31 @@ function render(){
     else drawDrone3D(cam.x,cam.y,cam.z,cam.yw,cam.cp);
     if(opSettings.fog)drawFogOverlay();
     drawMinimap();drawHUD();
+    if(debugOn)drawDebug();
     var vehLabel=heliMode?'HELICOPTER':'DRONE';
     X.fillStyle='#0ff';X.font='bold 9px sans-serif';X.textAlign='center';
     X.fillText(vehLabel+' | LAP '+Math.min(curLap,totalLaps)+'/'+totalLaps,W/2,58);
     return;
   }
+}
+
+function drawDebug(){
+  X.fillStyle='rgba(0,0,0,0.8)';X.fillRect(8,70,220,260);
+  X.fillStyle='#0f0';X.font='bold 10px monospace';X.textAlign='left';
+  var y=85;var lines=[
+    'yaw:'+droneYaw.toFixed(3)+' cam:'+camYaw.toFixed(3),
+    'visYaw:'+droneVisYaw.toFixed(3),
+    'pos:'+droneX.toFixed(1)+','+droneY.toFixed(1)+','+droneZ.toFixed(1),
+    'vel:'+droneVX.toFixed(3)+','+droneVY.toFixed(3)+','+droneVZ.toFixed(3),
+    'pitch:'+dronePitch.toFixed(3)+' roll:'+droneRoll.toFixed(3),
+    'cam:'+camX.toFixed(1)+','+camY.toFixed(1)+','+camZ.toFixed(1),
+    'mode:'+(heliMode?'HELI':'DRONE')+' cam:'+camMode,
+    'keys:'+(keys['KeyW']?'W':'')+(keys['KeyS']?'S':'')+(keys['KeyA']?'A':'')+(keys['KeyD']?'D':'')+(keys['KeyQ']?'Q':'')+(keys['KeyE']?'E':'')+(keys['ShiftLeft']?'SH':''),
+    'spd:'+Math.sqrt(droneVX*droneVX+droneVZ*droneVZ).toFixed(2),
+    'track:'+TRACKS[curTrack].name,
+    'cp:'+(lastCP+1)+'/'+checkpoints.length+' lap:'+curLap+'/'+totalLaps
+  ];
+  lines.forEach(function(l){X.fillText(l,16,y);y+=14;});
 }
 
 function getCam(){
