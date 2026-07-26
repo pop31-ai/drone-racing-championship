@@ -578,8 +578,8 @@ function drawGround(cx,cy,cz,cyaw,cpitch){
     }
     return;
   }
-  var fwdX=Math.sin(droneYaw),fwdZ=Math.cos(droneYaw);
-  var rX=Math.cos(droneYaw),rZ=-Math.sin(droneYaw);
+  var fwdX=Math.sin(cyaw),fwdZ=Math.cos(cyaw);
+  var rX=Math.cos(cyaw),rZ=-Math.sin(cyaw);
   for(var gz=-200;gz<=200;gz+=20){
     for(var gx=-200;gx<=200;gx+=20){
       var p1=project(gx,0,gz,cx,cy,cz,cyaw,cpitch);
