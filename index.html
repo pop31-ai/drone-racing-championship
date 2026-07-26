@@ -131,6 +131,7 @@ button{font-family:inherit}
     <div class="sr"><label>Difficulty</label><select id="sd"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard</option></select></div>
     <div class="sr"><label>Camera</label><select id="sc"><option value="chase">Chase</option><option value="fpv">FPV</option><option value="top">Top-down</option></select></div>
     <div class="sr"><label>Vehicle</label><select id="sv"><option value="drone">Drone</option><option value="heli">Helicopter</option></select></div>
+    <div class="sr" id="heli-type-row" style="display:none"><label>Heli Type</label><select id="sht"><option value="0">Robinson R44</option><option value="1">Bell 206</option><option value="2">Mi-8 Hip</option><option value="3">EC135</option></select></div>
   </div>
   <div id="champ-progress" class="msec" style="display:none"></div>
   <div class="br">
@@ -352,6 +353,13 @@ var camX=0,camY=3,camZ=0,camYaw=0,camPitch=0;
 var state='menu',curTrack=0,champMode=false,totalLaps=25,diff='normal',camMode='chase';
 var debugOn=false;
 var heliMode=false;
+var heliType=0;
+var HELI_TYPES=[
+  {name:'Robinson R44',desc:'Bubble canopy, light sport',color:'#e8e8f0'},
+  {name:'Bell 206 JetRanger',desc:'Classic utility, rounded nose',color:'#c0c8d0'},
+  {name:'Mi-8 Hip',desc:'Heavy transport, twin engine',color:'#7a8a6a'},
+  {name:'Eurocopter EC135',desc:'Fenestron tail, modern medevac',color:'#f0f0ff'}
+];
 var raceTime=0,curLap=1,lastLapT=0,bestLap=Infinity,laps=[];
 var lastCP=-1,allCP=false,cpHashes=[];
 var paused=false,cdCount=0,cdTimer=0;
@@ -472,8 +480,8 @@ function beginRace(){setupTrack(curTrack);state='countdown';cdCount=3;cdTimer=0;
   updateTelemetry();
   if(innerWidth<=1024||navigator.maxTouchPoints>0){document.getElementById('gp-left').classList.add('show');document.getElementById('gp-right').classList.add('show');}
 }
-function startFreeRace(){var s=document.querySelector('.tc.sel');curTrack=s?parseInt(s.dataset.i):0;champMode=false;totalLaps=+document.getElementById('sl').value;diff=document.getElementById('sd').value;camMode=document.getElementById('sc').value;heliMode=document.getElementById('sv').value==='heli';initAudio();beginRace();}
-function startChamp(){champMode=true;curTrack=0;totalLaps=25;diff=document.getElementById('sd').value;camMode=document.getElementById('sc').value;heliMode=document.getElementById('sv').value==='heli';initAudio();beginRace();}
+function startFreeRace(){var s=document.querySelector('.tc.sel');curTrack=s?parseInt(s.dataset.i):0;champMode=false;totalLaps=+document.getElementById('sl').value;diff=document.getElementById('sd').value;camMode=document.getElementById('sc').value;heliMode=document.getElementById('sv').value==='heli';heliType=+document.getElementById('sht').value;initAudio();beginRace();}
+function startChamp(){champMode=true;curTrack=0;totalLaps=25;diff=document.getElementById('sd').value;camMode=document.getElementById('sc').value;heliMode=document.getElementById('sv').value==='heli';heliType=+document.getElementById('sht').value;initAudio();beginRace();}
 function finishRace(){
   state='finished';stopEngine();
   var bk='db_'+TRACKS[curTrack].id,pv=localStorage.getItem(bk);
@@ -1262,25 +1270,70 @@ function drawHeli3D(cx,cy,cz,cyaw,cpitch){
   var sz=Math.max(4,18*FOV/s.z);
   var vr=droneRoll*1.2;
   X.save();X.translate(s.x,s.y);X.rotate(vr);
+  var ht=HELI_TYPES[heliType];
+  var c=ht.color;
 
-  X.fillStyle='#3a3a4a';X.fillRect(-sz*.5,-sz*.15,sz*1,sz*.3);
-  X.fillStyle='#2a2a35';X.fillRect(-sz*.5,sz*.1,sz*.15,sz*.12);
-  X.fillStyle='#2a2a35';X.fillRect(sz*.35,sz*.05,sz*.2,sz*.08);
-  X.strokeStyle='rgba(0,255,255,0.5)';X.lineWidth=Math.max(1,sz*0.04);
-  X.beginPath();X.moveTo(-sz*.5,0);X.lineTo(sz*.5,0);X.stroke();
-  X.beginPath();X.moveTo(0,-sz*.15);X.lineTo(0,sz*.15);X.stroke();
+  if(heliType===0){
+    X.fillStyle=c;X.beginPath();X.ellipse(-sz*.05,0,sz*.22,sz*.18,0,0,Math.PI*2);X.fill();
+    X.strokeStyle='#888';X.lineWidth=1;X.stroke();
+    X.fillStyle='#aaddff';X.globalAlpha=0.4;X.beginPath();X.ellipse(-sz*.05,-sz*.06,sz*.16,sz*.12,-0.2,0,Math.PI*2);X.fill();X.globalAlpha=1;
+    X.fillStyle='#555';X.fillRect(sz*.15,-sz*.04,sz*.45,sz*.06);
+    X.strokeStyle='#888';X.lineWidth=1;X.beginPath();X.moveTo(sz*.55,-sz*.01);X.lineTo(sz*.7,sz*.08);X.stroke();
+    X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.02);
+    X.beginPath();X.moveTo(-sz*.08,sz*.18);X.lineTo(-sz*.08,sz*.28);X.stroke();
+    X.beginPath();X.moveTo(sz*.08,sz*.18);X.lineTo(sz*.08,sz*.28);X.stroke();
+    X.beginPath();X.moveTo(-sz*.15,sz*.28);X.lineTo(sz*.15,sz*.28);X.stroke();
+  }else if(heliType===1){
+    X.fillStyle=c;X.beginPath();
+    X.moveTo(-sz*.35,0);X.quadraticCurveTo(-sz*.25,-sz*.2,sz*.0,-sz*.12);
+    X.lineTo(sz*.5,-sz*.06);X.lineTo(sz*.55,sz*.06);X.lineTo(sz*.0,sz*.12);
+    X.quadraticCurveTo(-sz*.25,sz*.2,-sz*.35,0);X.fill();
+    X.strokeStyle='#999';X.lineWidth=1;X.stroke();
+    X.fillStyle='#aaddff';X.globalAlpha=0.35;X.beginPath();X.ellipse(-sz*.15,-sz*.06,sz*.12,sz*.09,-0.15,0,Math.PI*2);X.fill();X.globalAlpha=1;
+    X.fillStyle='#444';X.fillRect(sz*.1,-sz*.04,sz*.4,sz*.05);
+    X.strokeStyle='#777';X.lineWidth=1;X.beginPath();X.moveTo(sz*.5,-sz*.02);X.lineTo(sz*.62,sz*.06);X.stroke();
+    X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.02);
+    X.beginPath();X.moveTo(-sz*.05,sz*.15);X.lineTo(-sz*.05,sz*.26);X.stroke();
+    X.beginPath();X.moveTo(sz*.08,sz*.15);X.lineTo(sz*.08,sz*.26);X.stroke();
+    X.beginPath();X.moveTo(-sz*.12,sz*.26);X.lineTo(sz*.15,sz*.26);X.stroke();
+  }else if(heliType===2){
+    X.fillStyle=c;
+    X.fillRect(-sz*.35,-sz*.18,sz*.7,sz*.36);
+    X.fillStyle='#8a9a7a';X.fillRect(-sz*.35,-sz*.18,sz*.15,sz*.36);
+    X.strokeStyle='#556';X.lineWidth=1.5;X.strokeRect(-sz*.35,-sz*.18,sz*.7,sz*.36);
+    X.fillStyle='#aaddff';X.globalAlpha=0.3;X.fillRect(-sz*.3,-sz*.14,sz*.2,sz*.28);X.globalAlpha=1;
+    X.fillStyle='#555';X.fillRect(sz*.35,-sz*.06,sz*.4,sz*.08);
+    X.fillStyle='#666';X.fillRect(sz*.7,-sz*.1,sz*.08,sz*.16);
+    X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.025);
+    X.beginPath();X.moveTo(-sz*.15,sz*.18);X.lineTo(-sz*.15,sz*.3);X.stroke();
+    X.beginPath();X.moveTo(sz*.15,sz*.18);X.lineTo(sz*.15,sz*.3);X.stroke();
+    X.beginPath();X.moveTo(-sz*.22,sz*.3);X.lineTo(sz*.22,sz*.3);X.stroke();
+  }else{
+    X.fillStyle=c;X.beginPath();
+    X.moveTo(-sz*.3,0);X.quadraticCurveTo(-sz*.2,-sz*.18,sz*.05,-sz*.1);
+    X.lineTo(sz*.4,-sz*.05);X.lineTo(sz*.5,sz*.0);X.lineTo(sz*.4,sz*.05);
+    X.lineTo(sz*.05,sz*.1);X.quadraticCurveTo(-sz*.2,sz*.18,-sz*.3,0);X.fill();
+    X.strokeStyle='#aab';X.lineWidth=1;X.stroke();
+    X.fillStyle='#aaddff';X.globalAlpha=0.4;X.beginPath();X.ellipse(-sz*.1,-sz*.05,sz*.14,sz*.1,-0.1,0,Math.PI*2);X.fill();X.globalAlpha=1;
+    X.fillStyle='#556';X.fillRect(sz*.1,-sz*.04,sz*.32,sz*.05);
+    X.beginPath();X.arc(sz*.5,sz*.0,sz*.06,0,Math.PI*2);X.fillStyle='#666';X.fill();X.strokeStyle='#888';X.lineWidth=0.5;X.stroke();
+    X.strokeStyle='#666';X.lineWidth=Math.max(1,sz*0.02);
+    X.beginPath();X.moveTo(-sz*.05,sz*.15);X.lineTo(-sz*.05,sz*.25);X.stroke();
+    X.beginPath();X.moveTo(sz*.08,sz*.15);X.lineTo(sz*.08,sz*.25);X.stroke();
+    X.beginPath();X.moveTo(-sz*.1,sz*.25);X.lineTo(sz*.13,sz*.25);X.stroke();
+  }
 
   var rotA=(raceTime*30)%360*Math.PI/180;
-  X.globalAlpha=0.3;X.strokeStyle='#0ff';X.lineWidth=Math.max(1,sz*0.03);
-  X.beginPath();X.ellipse(0,-sz*.18,sz*.7*Math.cos(rotA)*0.3+sz*.5,sz*.06,0,0,Math.PI*2);X.stroke();
+  X.globalAlpha=0.35;X.strokeStyle='#0ff';X.lineWidth=Math.max(1,sz*0.03);
+  X.beginPath();X.ellipse(0,-sz*.2,sz*.7*Math.cos(rotA)*0.3+sz*.5,sz*.05,0,0,Math.PI*2);X.stroke();
   X.globalAlpha=1;
 
-  X.fillStyle='#f00';X.beginPath();X.arc(sz*.55,sz*.08,sz*.03,0,Math.PI*2);X.fill();
-  X.fillStyle='#0f0';X.beginPath();X.arc(-sz*.55,sz*.08,sz*.03,0,Math.PI*2);X.fill();
+  X.fillStyle='#f00';X.beginPath();X.arc(sz*.55,sz*.06,sz*.025,0,Math.PI*2);X.fill();
+  X.fillStyle='#0f0';X.beginPath();X.arc(-sz*.55,sz*.06,sz*.025,0,Math.PI*2);X.fill();
 
   if(keys['ShiftLeft']||keys['ShiftRight']||(jrAct.a&&jrAct.y<-0.3)){
-    X.globalAlpha=0.15;X.fillStyle='#aaa';
-    X.beginPath();X.arc(0,sz*.3,sz*.15,0,Math.PI*2);X.fill();
+    X.globalAlpha=0.12;X.fillStyle='#aaa';
+    X.beginPath();X.arc(0,sz*.35,sz*.18,0,Math.PI*2);X.fill();
     X.globalAlpha=1;
   }
   X.restore();
@@ -1668,6 +1721,7 @@ function getCam(){
 
 document.getElementById('bf').addEventListener('click',startFreeRace);
 document.getElementById('bc').addEventListener('click',startChamp);
+document.getElementById('sv').addEventListener('change',function(){document.getElementById('heli-type-row').style.display=this.value==='heli'?'':'none';});
 document.getElementById('pause-btn').addEventListener('click',togglePause);
 document.getElementById('br2').addEventListener('click',togglePause);
 document.getElementById('bq').addEventListener('click',toMenu);
